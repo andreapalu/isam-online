@@ -13,8 +13,7 @@ export class AppComponent {
   public out: string;
   public users: ResponseModel[];
   public outPresent: boolean = false;
-  private url =
-    "http://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=&q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol=%22goog%22";
+  private url = "http://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=&q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol=%22goog%22";
   private headers = new Headers({ "Content-Type": "application/json" });
 
   stocks = [
@@ -27,7 +26,7 @@ export class AppComponent {
   constructor(
     private httpClient: HttpClient,
     private stockService: StockService
-  ) {}
+  ) { }
 
   fetchData() {
     let res: ResponseModel[];
@@ -55,7 +54,7 @@ export class AppComponent {
 
   public tryService() {
     this.stockService.getStockInformation(this.stocks[0].symbol).subscribe(response => {
-      console.log("questo: "+JSON.stringify(response));
+      console.log("questo: " + JSON.stringify(response));
     });
   }
 }
