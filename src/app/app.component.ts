@@ -16,6 +16,8 @@ export class AppComponent {
     "http://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=&q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol=%22goog%22";
   private headers = new Headers({ "Content-Type": "application/json" });
 
+  testCommit;
+
   constructor(private httpClient: HttpClient) {}
 
   fetchData() {
