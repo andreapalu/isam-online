@@ -5,11 +5,10 @@ import { HttpClientModule } from "@angular/common/http";
 // import * as unirest from "unirest";
 
 import { AppComponent } from "./app.component";
-import { HelloComponent } from "./hello.component";
 
 @NgModule({
   imports: [BrowserModule, FormsModule, HttpClientModule],
-  declarations: [AppComponent, HelloComponent],
+  declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
