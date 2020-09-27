@@ -7,7 +7,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
+    // "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
@@ -17,8 +17,27 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    // "module": "commonjs",
+    // "types": [
+    //   "jasmine",
+    //   "node"
+    // ],
+    "module": "es2015",
+    // "types": ["jest"]
+    "types": []
   },
+  "files": [
+    "test.ts"
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ],
   "angularCompilerOptions": {
     "enableIvy": true,
     "fullTemplateTypeCheck": true,
