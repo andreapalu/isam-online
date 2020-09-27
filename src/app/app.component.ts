@@ -54,6 +54,7 @@ export class AppComponent {
 
   public tryService() {
     this.stockService.fetch(this.stocks[0].symbol).subscribe(response => {
+      debugger
       console.log("questo: " + JSON.stringify(response));
     });
   }
