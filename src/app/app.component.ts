@@ -13,7 +13,8 @@ export class AppComponent {
   public out: string;
   public users: ResponseModel[];
   public outPresent: boolean = false;
-  private url = "http://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=&q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol=%22goog%22";
+  private url =
+    "https://query1.finance.yahoo.com/v8/finance/chart/TSLA";
   private headers = new Headers({ "Content-Type": "application/json" });
 
   stocks = [
@@ -26,7 +27,7 @@ export class AppComponent {
   constructor(
     private httpClient: HttpClient,
     private stockService: StockService
-  ) { }
+  ) {}
 
   fetchData() {
     let res: ResponseModel[];
@@ -53,11 +54,30 @@ export class AppComponent {
   }
 
   public tryService() {
-    this.stockService.fetch(this.stocks[0].symbol).subscribe(response => {
-      debugger
-      console.log("questo: " + JSON.stringify(response));
+    this.stockService
+      .getStockInformation(this.stocks[0].symbol)
+      .subscribe(response => {
+        debugger;
+        console.log("questo: " + JSON.stringify(response));
+      });
+  }
+
+  // FETCH COURSE -- FUNZIA
+  /*
+  searchString: String = "";
+  imageSearch = [];
+  searchImages() {
+    const urlofApi =
+      "https://api.github.com/search/repositories?q=" + this.searchString;
+    this.httpClient.get(urlofApi).subscribe((res) => {
+      const searchResult: any = res;
+      console.log(searchResult);
+      this.imageSearch = searchResult.items;
+      //console.log(this.imageSearch.owner.avatar_url);
     });
   }
+  */
+
 }
 
 export class ResponseModel {

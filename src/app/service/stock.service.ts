@@ -48,7 +48,7 @@ export class StockService {
 
     return from(
       // wrap the fetch in a from if you need an rxjs Observable
-      fetch(proxyTest, {
+      fetch(api, {
         // body: JSON.stringify(data),
         headers: {
           Accept:
