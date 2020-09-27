@@ -1,0 +1,29 @@
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7
+Connection: keep-alive
+Cookie: APID=UP1cbaa679-9441-11e9-92a0-0601b7e78e82; B=4vqa5cdegq158&b=3&s=oe; A1=d=AQABBGHvO14CEN6s52wFAFYo1K9ed0UUZZsFEgABAgGVb19FYOdVb2UB9iMAAAcIqAQNXWNF6U8&S=AQAAAj6EcfDkAlZrYlizTfi0Al0; A3=d=AQABBGHvO14CEN6s52wFAFYo1K9ed0UUZZsFEgABAgGVb19FYOdVb2UB9iMAAAcIqAQNXWNF6U8&S=AQAAAj6EcfDkAlZrYlizTfi0Al0; GUC=AQABAgFfb5VgRUIf6QRU
+DNT: 1
+Host: query1.finance.yahoo.com
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36
+
+// origin
+GET /v8/finance/chart/TSLA HTTP/1.1
+Host: query1.finance.yahoo.com
+Connection: keep-alive
+DNT: 1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: APID=UP1cbaa679-9441-11e9-92a0-0601b7e78e82; B=4vqa5cdegq158&b=3&s=oe; A1=d=AQABBGHvO14CEN6s52wFAFYo1K9ed0UUZZsFEgABAgGVb19FYOdVb2UB9iMAAAcIqAQNXWNF6U8&S=AQAAAj6EcfDkAlZrYlizTfi0Al0; A3=d=AQABBGHvO14CEN6s52wFAFYo1K9ed0UUZZsFEgABAgGVb19FYOdVb2UB9iMAAAcIqAQNXWNF6U8&S=AQAAAj6EcfDkAlZrYlizTfi0Al0; GUC=AQABAgFfb5VgRUIf6QRU
