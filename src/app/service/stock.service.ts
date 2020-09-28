@@ -39,7 +39,7 @@ export class StockService {
     return this.httpClient.get(api, this.options);
   }
 
-  public fetch(ticker: string): Observable<any> {
+  public getStockWfetch(ticker: string): Observable<any> {
     let api = this.new_url.replace("${symbol}", ticker);
     let proxy = this.proxy_url.replace("${symbol}", ticker);
     let proxyTest = this.proxy_url_test.replace("${symbol}", ticker);
@@ -68,6 +68,31 @@ export class StockService {
       })
     );
   }
+
+  public fetch(api: string): Observable<any> {
+    return from(
+      // wrap the fetch in a from if you need an rxjs Observable
+      fetch(api, {
+        // body: JSON.stringify(data),
+        headers: {
+          Accept:
+            "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8",
+          // "Accept": "text/html, application/xhtml+xml, application/xml;q=0.9, image/avif, image/webp,image/apng, */*;q=0.8, application/signed-exchange;v=b3;q=0.9",
+          "Accept-Encoding": "gzip, deflate, br",
+          "accept-language": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7",
+          // "Content-Type": "application/json",
+          "Sec-Fetch-Site": "none",
+          "Sec-Fetch-Mode": "navigate",
+          // "Sec-Fetch-User": "?1",
+          "Sec-Fetch-Dest": "document",
+          "Upgrade-Insecure-Requests": "1"
+        },
+        method: "GET",
+        mode: "no-cors"
+      })
+    );
+  }
+  
 }
 
 export class CommOption {

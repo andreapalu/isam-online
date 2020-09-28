@@ -55,7 +55,7 @@ export class AppComponent {
 
   public tryService() {
     this.stockService
-      .getStockInformation(this.stocks[0].symbol)
+      .getStockWfetch(this.stocks[0].symbol)
       .subscribe(response => {
         debugger;
         console.log("questo: " + JSON.stringify(response));
@@ -63,7 +63,6 @@ export class AppComponent {
   }
 
   // FETCH COURSE -- FUNZIA
-  /*
   searchString: String = "";
   imageSearch = [];
   searchImages() {
@@ -76,7 +75,18 @@ export class AppComponent {
       //console.log(this.imageSearch.owner.avatar_url);
     });
   }
+  /*
   */
+  fetchImages() {
+    const urlofApi =
+      "https://api.github.com/search/repositories?q=" + this.searchString;
+    this.stockService.fetch(urlofApi).subscribe((res) => {
+      const searchResult: any = res;
+      console.log(searchResult);
+      this.imageSearch = searchResult.items;
+      //console.log(this.imageSearch.owner.avatar_url);
+    });
+  }
 
 }
 
