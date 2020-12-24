@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "rootDir": "./src",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -28,14 +29,14 @@
     "types": []
   },
   "files": [
-    "test.ts"
+    "src/test.ts"
   ],
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
   ],
   "exclude": [
-    "test.ts",
+    "src/test.ts",
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {

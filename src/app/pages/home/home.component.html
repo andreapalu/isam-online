@@ -1,0 +1,32 @@
+homepage
+
+<button (click)="tryService()">
+	recupera dati
+</button>
+<br><br>
+<ng-container *ngIf="outPresent">
+	<strong>Conta: {{users.length}}</strong><br><br>
+	<ng-container *ngFor="let user of users">
+		userId: {{user.userId}}<br>
+		id: {{user.id}}<br>
+		title: {{user.title}}<br>
+		body: {{user.body}}<br><br>
+	</ng-container>
+</ng-container>
+
+<div class="row">
+	<p>
+		Course Name : </p><input type="text" [(ngModel)]=searchString>
+	<div class="col-4">
+		<button (click)="searchImages()">Search OK</button>
+	</div>
+	<div class="col-4">
+		<button (click)="fetchImages()">Search EXP</button>
+	</div>
+</div>
+
+<ul>
+	<li *ngFor="let image1 of imageSearch">
+		<img src="{{image1.owner.avatar_url}}">
+	</li>
+</ul>

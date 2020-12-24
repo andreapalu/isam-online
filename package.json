@@ -14,6 +14,7 @@
     "@types/jest": "^26.0.14",
     "@types/mocha": "^8.0.3",
     "@types/node": "7.0.61",
+    "bootstrap": "4.1.1",
     "rxjs": "6.3.3",
     "tslib": "^2.0.1",
     "unirest": "^0.6.0",
@@ -30,7 +31,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
     "@angular/cli": "7.1.0",
-    "@angular/compiler-cli": "7.1.0",
+    "@angular/compiler-cli": "^7.2.16",
     "@angular/language-service": "7.1.0",
     "@types/jasmine": "2.8.6",
     "@types/jasminewd2": "2.0.3",
