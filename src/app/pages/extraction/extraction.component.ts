@@ -11,8 +11,10 @@ export class ExtractionComponent {
 
   /** Data selezionata */
   selectedDate: Date;
+  selectedExtraction: Exctraction;
 
   extractionList: Exctraction[] = [];
+  extractionTypeList: string[] = [];
 
   @ViewChild('tableContainer') tableContainer: ElementRef;
 
@@ -21,10 +23,16 @@ export class ExtractionComponent {
     private renderer: Renderer2
   ) { }
 
-  showEctraction(exct: Exctraction) {
-    this.selectedDate = exct.date;
-    if (!!exct.data && exct.data.length > 0) {
-      let filename: string = 'Estrazione '.concat((typeof exct.date == "string" ? new Date(exct.date) : exct.date).toLocaleTimeString());
+  selectDate(ext: Exctraction) {
+    this.selectedDate = ext.date;
+    this.selectedExtraction = ext;
+    this.extractionTypeList = [];
+    this.selectedExtraction.refineMap.forEach((value, key) => { this.extractionTypeList.push(key) });
+  }
+
+  showExtraction() {
+    if (!!this.selectedExtraction.data && this.selectedExtraction.data.length > 0) {
+      let filename: string = 'Estrazione '.concat((typeof this.selectedExtraction.date == "string" ? new Date(this.selectedExtraction.date) : this.selectedExtraction.date).toLocaleTimeString());
 
       let oldTable = document.getElementById("generatedExtractionTable");
       !!oldTable && document.getElementById("generatedExtractionTable").parentNode.removeChild(oldTable);
@@ -37,7 +45,7 @@ export class ExtractionComponent {
       rowMaster.style.background = "#CCCCCC";
       rowMaster.style.border = "1px solid black";
 
-      exct.data.forEach((row, index) => {
+      this.selectedExtraction.data.forEach((row, index) => {
         let tr = document.createElement("tr");
         tr.style.border = "1px solid black";
         Object.keys(row).forEach(colKey => {

@@ -19,7 +19,21 @@ export class ExtractionService {
             this.extractionList = [];
             let serviceData: Exctraction[] = JSON.parse(sessionStorage.getItem('serviceData'));
             if (!!serviceData) {
-                this.extractionList = serviceData;
+                serviceData.forEach(servExt => {
+                    let ext: Exctraction = {
+                        date: new Date(servExt.date),
+                        data: servExt.data,
+                        rawMap: new Map(),
+                        refineMap: new Map()
+                    };
+                    let mapindex: number = -1;
+                    servExt.data.forEach((row, ri) => {
+                        let out = this.populateMap(row, ext, mapindex);
+                        ext = out.ext;
+                        mapindex = out.mapindex;
+                    });
+                    this.extractionList.push(ext);
+                });
             }
             resolve();
         });
@@ -28,7 +42,13 @@ export class ExtractionService {
     saveUploaded(fileDate: string) {
         !!this.exceltoJson && Object.keys(this.exceltoJson).forEach(key => {
             if (key.startsWith("sheet")) {
-                let ext: Exctraction = { date: new Date(fileDate), data: [] };
+                let ext: Exctraction = {
+                    date: new Date(fileDate),
+                    data: [],
+                    rawMap: new Map(),
+                    refineMap: new Map()
+                };
+                let mapindex: number = -1;
                 !!this.exceltoJson[key] && this.exceltoJson[key].forEach((row, ri) => {
                     let newRow = {};
                     Object.keys(row).forEach((rowkey, i) => {
@@ -43,12 +63,33 @@ export class ExtractionService {
                     })
                     if (Object.keys(newRow).find(rowkey => stringsNotNull(newRow[rowkey]))) {
                         ext.data.push(newRow);
+                        let out = this.populateMap(newRow, ext, mapindex);
+                        ext = out.ext;
+                        mapindex = out.mapindex;
                     }
                 });
                 ext.data.length > 0 && this.extractionList.push(ext);
             }
         });
         sessionStorage.setItem('serviceData', JSON.stringify(this.extractionList));
+    }
+
+    populateMap(row: any, ext: Exctraction, mapindex: number): { ext: Exctraction, mapindex: number } {
+        let firstKey: string = row[Object.keys(row)[0]];
+        if (firstKey == 'Descrizione') {
+            mapindex++;
+            ext.rawMap.set(mapindex, [row]);
+        } else if (ext.rawMap.has(mapindex)) {
+            ext.rawMap.get(mapindex).push(row);
+        }
+        if (firstKey.startsWith("TOT")) {
+            ext.refineMap.set(
+                firstKey.split(" ")[1],
+                ext.rawMap.get(mapindex)
+            )
+            mapindex++;
+        }
+        return { ext: ext, mapindex: mapindex }
     }
 
     uploadExcel(event: any) {
