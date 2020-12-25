@@ -15,6 +15,9 @@ export { AppComponent } from "./app.component";
 import { HomeComponent } from "./pages/home/home.component";
 export { HomeComponent } from "./pages/home/home.component";
 
+import { TestServiceComponent } from "./pages/test-service/test-service.component";
+export { TestServiceComponent } from "./pages/test-service/test-service.component";
+
 import { ExtractionComponent } from "./pages/extraction/extraction.component";
 export { ExtractionComponent } from "./pages/extraction/extraction.component";
 
@@ -38,6 +41,7 @@ export function initExtService(extractionService: ExtractionService): Function {
 
 export const routerModuleForChild = RouterModule.forRoot([
   { path: 'home', component: HomeComponent },
+  { path: 'test-service', component: TestServiceComponent },
   { path: 'extraction', component: ExtractionComponent },
   { path: '**', component: HomeComponent }
 ]);
@@ -55,6 +59,7 @@ export const routerModuleForChild = RouterModule.forRoot([
     HomeComponent,
     ExtractionComponent,
     HeaderComponent,
+    TestServiceComponent
     // DatepickerDropdownComponent
   ],
   entryComponents: [

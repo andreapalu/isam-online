@@ -8,10 +8,8 @@
     "experimentalDecorators": true,
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
-
     // "experimentalDecorators": true,
     // "outDir": "./dist/out-tsc",
-
     "baseUrl": "./",
     "sourceMap": true,
     "declaration": false,

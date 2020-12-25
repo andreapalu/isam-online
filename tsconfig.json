@@ -11,7 +11,7 @@
     // "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES6",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -38,10 +38,11 @@
   "exclude": [
     "src/test.ts",
     "**/*.spec.ts"
-  ],
-  "angularCompilerOptions": {
-    "enableIvy": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  ]
+  // ,
+  // "angularCompilerOptions": {
+  //   "enableIvy": true,
+  //   "fullTemplateTypeCheck": true,
+  //   "strictInjectionParameters": true
+  // }
 }
