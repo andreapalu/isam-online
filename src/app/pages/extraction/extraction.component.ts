@@ -11,6 +11,7 @@ export class ExtractionComponent {
 
   /** Data selezionata */
   selectedDate: Date;
+  selectedExtractionDeatil: string;
   selectedExtraction: Exctraction;
 
   extractionList: Exctraction[] = [];
@@ -30,9 +31,28 @@ export class ExtractionComponent {
     this.selectedExtraction.refineMap.forEach((value, key) => { this.extractionTypeList.push(key) });
   }
 
-  showExtraction() {
-    if (!!this.selectedExtraction.data && this.selectedExtraction.data.length > 0) {
-      let filename: string = 'Estrazione '.concat((typeof this.selectedExtraction.date == "string" ? new Date(this.selectedExtraction.date) : this.selectedExtraction.date).toLocaleTimeString());
+  showSingleExtraction(extKey: string) {
+    if (this.selectedExtraction.refineMap.has(extKey)) {
+      this.selectedExtractionDeatil = extKey;
+      this.showExtraction(this.selectedExtraction.refineMap.get(extKey))
+    } else {
+      this.selectedExtractionDeatil = undefined;
+      window.alert("Estrazione not found!");
+    }
+  }
+
+  showExtraction(extKey?: any[]) {
+    let selectedExtraction: Exctraction;
+    let detail: boolean = false;
+    if (!!extKey) {
+      detail = true;
+      selectedExtraction = { data: extKey, date: this.selectedDate };
+    } else {
+      this.selectedExtractionDeatil = "Tutte";
+      selectedExtraction = this.selectedExtraction;
+    }
+    if (!!selectedExtraction.data && selectedExtraction.data.length > 0) {
+      let filename: string = 'Estrazione '.concat((typeof selectedExtraction.date == "string" ? new Date(selectedExtraction.date) : selectedExtraction.date).toLocaleTimeString());
 
       let oldTable = document.getElementById("generatedExtractionTable");
       !!oldTable && document.getElementById("generatedExtractionTable").parentNode.removeChild(oldTable);
@@ -45,7 +65,7 @@ export class ExtractionComponent {
       rowMaster.style.background = "#CCCCCC";
       rowMaster.style.border = "1px solid black";
 
-      this.selectedExtraction.data.forEach((row, index) => {
+      selectedExtraction.data.forEach((row, index) => {
         let tr = document.createElement("tr");
         tr.style.border = "1px solid black";
         Object.keys(row).forEach(colKey => {
@@ -57,12 +77,13 @@ export class ExtractionComponent {
             th.style.border = "1px solid black";
             th.innerHTML = col;
             rowMaster.appendChild(th);
+          } else {
+            let td = document.createElement("td");
+            td.style.fontWeight = "bold";
+            td.style.border = "1px solid black";
+            td.innerHTML = col;
+            tr.appendChild(td);
           }
-          let td = document.createElement("td");
-          td.style.fontWeight = "bold";
-          td.style.border = "1px solid black";
-          td.innerHTML = col;
-          tr.appendChild(td);
         });
         if (index == 0) {
           table.appendChild(rowMaster);

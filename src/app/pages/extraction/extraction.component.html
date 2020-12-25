@@ -2,7 +2,7 @@ Seleziona il giorno:
 <div class="row btn-group">
     <button *ngIf="!!selectedDate; else noDateButton" type="button" class="btn">{{selectedDate |
         date:'longDate'}}</button>
-    <ng-template noDateButton>
+    <ng-template #noDateButton>
         <button type="button" disabled class="btn">-</button>
     </ng-template>
     <button type="button" id="dropdownMenuButton" class="btn dropdown-toggle dropdown-toggle-split"
@@ -27,13 +27,20 @@ Seleziona il giorno:
         <div class="col tableContainer">
             <!-- Example split danger button -->
             <div class="btn-group">
-                <button type="button" class="btn btn-primary">Seleziona l'estrazione</button>
+                <button *ngIf="!selectedExtractionDeatil; else selectedDetail" type="button" class="btn btn-primary">Seleziona l'estrazione</button>
+                <ng-template #selectedDetail>
+                    <button type="button" class="btn btn-primary">
+                        {{selectedExtractionDeatil}}
+                    </button>
+                </ng-template>
                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                     data-toggle="dropdown" aria-expanded="false">
                     <span class="sr-only"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li *ngFor="let singleExt of extractionTypeList"><a class="dropdown-item">{{singleExt}}</a></li>
+                    <li *ngFor="let singleExt of extractionTypeList">
+                        <a class="dropdown-item" (click)="showSingleExtraction(singleExt)">{{singleExt}}</a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
