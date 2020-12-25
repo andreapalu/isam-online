@@ -43,9 +43,7 @@ export class ExtractionComponent {
 
   showExtraction(extKey?: any[]) {
     let selectedExtraction: Exctraction;
-    let detail: boolean = false;
     if (!!extKey) {
-      detail = true;
       selectedExtraction = { data: extKey, date: this.selectedDate };
     } else {
       this.selectedExtractionDeatil = "Tutte";
@@ -79,6 +77,11 @@ export class ExtractionComponent {
             rowMaster.appendChild(th);
           } else {
             let td = document.createElement("td");
+            if (col == "Descrizione") {
+              tr.style.fontWeight = "bold";
+              tr.style.background = "#CCCCCC";
+              tr.style.border = "1px solid black";
+            }
             td.style.fontWeight = "bold";
             td.style.border = "1px solid black";
             td.innerHTML = col;

@@ -83,13 +83,15 @@ export class ExtractionService {
             ext.rawMap.get(mapindex).push(row);
         }
         if (firstKey.startsWith("TOT")) {
+            let arr = firstKey.split(" ");
+            arr.splice(0,1);
             ext.refineMap.set(
-                firstKey.split(" ")[1],
+                arr.join(" "),
                 ext.rawMap.get(mapindex)
-            )
+            );
             mapindex++;
         }
-        return { ext: ext, mapindex: mapindex }
+        return { ext: ext, mapindex: mapindex };
     }
 
     uploadExcel(event: any) {

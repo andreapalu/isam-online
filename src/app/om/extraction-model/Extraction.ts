@@ -14,11 +14,15 @@ export class ExtractionDetail {
   constructor(extractions: any[]) {
     let notificationType: string;
     let extractionObj: ExtractionObj = ExtractionDetailMap.get(notificationType);
-    this.extractionLabel = extractionObj.extractionLabel;
-    this.extractionType = notificationType;
-    extractions.forEach(extraction => {
-      this.rows.push(new ExtractionRow(extractionObj.extractionColumns, extraction));
-    });
+    if (!!extractionObj) {
+      this.extractionLabel = extractionObj.extractionLabel;
+      this.extractionType = notificationType;
+      extractions.forEach(extraction => {
+        this.rows.push(new ExtractionRow(extractionObj.extractionColumns, extraction));
+      });
+    } else {
+      window.alert("Unsupported extraction");
+    }
   }
 }
 
@@ -77,6 +81,20 @@ export class ExtractionObj {
 }
 
 // ---------- CONST ----------
+
+export function getExtractionType(key): string {
+  switch (key) {
+    case "Azioni":
+    case "Obbligazioni":
+    case "Titoli Di Stato":
+    case "ETF":
+    case "ETC":
+    case "Certificates":
+      return ExtractionTypes._financialInvestments;
+    default:
+      return "not found";
+  }
+}
 
 export const ExtractionTypes = {
   _financialInvestments: "Investimenti finanziari"
