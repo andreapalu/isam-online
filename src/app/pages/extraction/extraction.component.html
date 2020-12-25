@@ -1,0 +1,28 @@
+Seleziona il giorno:
+<div class="row btn-group">
+    <button *ngIf="!!selectedDate; else noDateButton" type="button" class="btn">{{selectedDate | date:'longDate'}}</button>
+    <ng-template noDateButton>
+        <button type="button" disabled class="btn">-</button>
+    </ng-template>
+    <button type="button" id="dropdownMenuButton" class="btn dropdown-toggle dropdown-toggle-split"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle Dropdown - non visualizzato</span>
+    </button>
+    <button style="margin-left: 20px;" type="button" class="btn btn-success" (click)="exportAsExcel()">
+        Esporta come excel
+    </button>
+    <div class="dropdown-menu overflow-auto" aria-labelledby="dropdownMenuButton">
+        <div class="list-group" style="height: 200px;">
+            <button *ngFor="let exct of extractionService.extractionList" type="button"
+                class="list-group-item list-group-item-action" (click)="showEctraction(exct)">
+                {{exct.date | date:'longDate'}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col tableContainer" #tableContainer>
+        <ng-container ></ng-container>
+    </div>
+</div>

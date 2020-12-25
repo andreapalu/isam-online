@@ -1,0 +1,9 @@
+.date-picker-wrapper {
+    padding: 1rem;
+}
+
+:host {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}

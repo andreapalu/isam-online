@@ -1,0 +1,36 @@
+<form>
+    <div class="sample-wrapper date-picker-wrapper">
+        <p class="sample-description">Inside a form - broken (note error in console)
+        </p>
+        <div>
+            <igx-date-picker #editable mode="dropdown" format="longDate" mask="dd-MM-y" [(ngModel)]="person.birthday">
+            </igx-date-picker>
+            <label>Date: {{ editable.value | date:'fullDate' }}</label>
+        </div>
+    </div>
+</form>
+<form>
+    <div class="sample-wrapper date-picker-wrapper">
+        <p class="sample-description">Outside of form - name
+        </p>
+        <div>
+            <igx-date-picker #editable mode="dropdown" name="date" format="longDate" mask="dd-MM-y"
+                [(ngModel)]="person.birthday">
+            </igx-date-picker>
+            <label>Date: {{ editable.value | date:'fullDate' }}</label>
+        </div>
+    </div>
+</form>
+
+<form>
+    <div class="sample-wrapper date-picker-wrapper">
+        <p class="sample-description">Outside of form - standalone
+        </p>
+        <div>
+            <igx-date-picker #editable mode="dropdown" [ngModelOptions]="{standalone: true}" format="longDate"
+                mask="dd-MM-y" [(ngModel)]="person.birthday">
+            </igx-date-picker>
+            <label>Date: {{ editable.value | date:'fullDate' }}</label>
+        </div>
+    </div>
+</form>

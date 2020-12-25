@@ -2,10 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "../dist",
-    "rootDir": "../../isam-online",
+    // "rootDir": "../../isam-online",
     /* Experimental Options */
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
 
@@ -18,13 +18,13 @@
     "downlevelIteration": true,
     // "module": "esnext",
     "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
+    // "importHelpers": true,
+    "target": "es2017",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
+      "es2017",
       "dom"
     ],
     // "module": "commonjs",

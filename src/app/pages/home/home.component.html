@@ -1,9 +1,8 @@
-homepage
-
 <button (click)="tryService()">
 	recupera dati
 </button>
 <br><br>
+
 <ng-container *ngIf="outPresent">
 	<strong>Conta: {{users.length}}</strong><br><br>
 	<ng-container *ngFor="let user of users">

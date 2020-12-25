@@ -8,8 +8,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" routerLink="/home">
-            <img src="assets/image/favicon-32x32.png" alt="" width="30" height="24"
-                class="d-inline-block align-top">
+            <img src="assets/image/favicon-32x32.png" alt="" width="30" height="24" class="d-inline-block align-top">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,27 +17,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" routerLink="/second" routerLinkActive="active">
-                        Seconda pagina
+                    <a class="nav-link active" aria-current="page" routerLink="/extraction" routerLinkActive="active">
+                        Estrazioni
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Azioni
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
                         <li>
+                            <button class="dropdown-item btn" data-toggle="modal" data-target="#uploadExtractionModal">
+                                Carica estrazione
+                            </button>
+                        </li>
+                        <!-- <li><a class="dropdown-item" href="#">Another action</a></li> -->
+                        <!-- <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li> -->
                     </ul>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                </li> -->
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -47,3 +50,37 @@
         </div>
     </div>
 </nav>
+
+<!-- MODALE CARICA EXCEL -->
+<div class="modal fade" tabindex="-1" id="uploadExtractionModal" #uploadExtractionModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">CARICA ESTRAZIONE</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin: 10px;">
+                    <label for="extractionDate" style="margin-right: 5px;">Data estrazione: </label>
+                    <input *ngIf="resetExcelInput" required type="date" id="extractionDate" [(ngModel)]="excelDate"
+                        (ngModelChange)="setDate($event)">
+                </div>
+                <!-- <datepicker></datepicker> -->
+
+                <div class="row" style="margin: 10px;">
+                    <!-- <p>Inserisci il file</p> -->
+                    <label for="excelUploader" style="margin-right: 5px;">Inserisci il file: </label>
+                    <input *ngIf="resetExcelInput" id="excelUploader" required accept=".xls, .xlsx" type="file"
+                        (change)="onFileChange($event)">
+                </div>
+            </div>
+            <div class="modal-footer" style="display: inline;">
+                <button id="dismissButton" type="button" class="btn btn-secondary" data-dismiss="modal">ANNULLA</button>
+                <button style="float: right;" type="button" class="btn btn-primary" data-dismiss="modal"
+                    routerLink="/extraction" (click)="saveUploaded();" [disabled]="extractionNotLoaded || extractionNotLoaded">
+                    CONTINUA
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
