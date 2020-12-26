@@ -87,7 +87,6 @@ export class ExtractionComponent {
               rowMaster.appendChild(th);
             } else {
               let td = document.createElement("td");
-              // td.style.fontWeight = "bold";
               td.style.border = "1px solid black";
               td.innerHTML = !!col.colField ? col.isCurrency ? this.formatMoney(col.colField) : col.colField : "-";
               tr.appendChild(td);
