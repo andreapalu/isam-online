@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer2, ViewChild } from "@angular/core";
-import { Exctraction } from "../../om/extraction-model/Extraction";
+import { Exctraction, ExtractionDetail } from "../../om/extraction-model/Extraction";
 import { ExtractionService } from "../../service/extraction.service";
 
 @Component({
@@ -29,75 +29,78 @@ export class ExtractionComponent {
     this.selectedExtraction = ext;
     this.extractionTypeList = [];
     this.selectedExtraction.refineMap.forEach((value, key) => { this.extractionTypeList.push(key) });
+    this.showExtraction();
   }
 
   showSingleExtraction(extKey: string) {
     if (this.selectedExtraction.refineMap.has(extKey)) {
       this.selectedExtractionDeatil = extKey;
-      this.showExtraction(this.selectedExtraction.refineMap.get(extKey))
+      this.showExtraction(this.selectedExtraction.parsedData.find(el => el.extractionLabel == extKey))
     } else {
       this.selectedExtractionDeatil = undefined;
       window.alert("Estrazione not found!");
     }
   }
 
-  showExtraction(extKey?: any[]) {
-    let selectedExtraction: Exctraction;
-    if (!!extKey) {
-      selectedExtraction = { data: extKey, date: this.selectedDate };
+  showExtraction(extractionDetail?: ExtractionDetail) {
+    let selectedExtractions: ExtractionDetail[];
+    if (!!extractionDetail) {
+      selectedExtractions = [extractionDetail];
     } else {
       this.selectedExtractionDeatil = "Tutte";
-      selectedExtraction = this.selectedExtraction;
+      selectedExtractions = this.selectedExtraction.parsedData;
     }
-    if (!!selectedExtraction.data && selectedExtraction.data.length > 0) {
-      let filename: string = 'Estrazione '.concat((typeof selectedExtraction.date == "string" ? new Date(selectedExtraction.date) : selectedExtraction.date).toLocaleTimeString());
 
-      let oldTable = document.getElementById("generatedExtractionTable");
-      !!oldTable && document.getElementById("generatedExtractionTable").parentNode.removeChild(oldTable);
-      // !!oldTable && document.body.removeChild(oldTable);
-      let table = document.createElement("table");
-      table.id = "generatedExtractionTable";
-      table.style.border = "1px solid black";
-      let rowMaster = document.createElement("tr");
-      rowMaster.style.fontWeight = "bold";
-      rowMaster.style.background = "#CCCCCC";
-      rowMaster.style.border = "1px solid black";
+    let oldTable = document.getElementById("generatedExtractionTable");
+    !!oldTable && document.getElementById("generatedExtractionTable").parentNode.removeChild(oldTable);
 
-      selectedExtraction.data.forEach((row, index) => {
-        let tr = document.createElement("tr");
-        tr.style.border = "1px solid black";
-        Object.keys(row).forEach(colKey => {
-          let col = row[colKey];
-          if (index == 0) {
-            let th = document.createElement("th");
-            th.style.fontWeight = "bold";
-            th.style.color = "#1775BE";
-            th.style.border = "1px solid black";
-            th.innerHTML = col;
-            rowMaster.appendChild(th);
-          } else {
-            let td = document.createElement("td");
-            if (col == "Descrizione") {
-              tr.style.fontWeight = "bold";
-              tr.style.background = "#CCCCCC";
-              tr.style.border = "1px solid black";
+    (selectedExtractions || []).forEach(selectedExtraction => {
+      if (
+        !!selectedExtraction
+        && !!selectedExtraction.rows
+        && selectedExtraction.rows.length > 0
+      ) {
+        let filename: string = 'Estrazione '.concat((typeof this.selectedDate == "string" ? new Date(this.selectedDate) : this.selectedDate).toLocaleTimeString());
+
+        let table = document.createElement("table");
+        table.id = "generatedExtractionTable";
+        table.style.border = "1px solid black";
+        let rowMaster = document.createElement("tr");
+        rowMaster.style.fontWeight = "bold";
+        rowMaster.style.background = "#CCCCCC";
+        rowMaster.style.border = "1px solid black";
+
+        selectedExtraction.rows.forEach((row, index) => {
+          let tr = document.createElement("tr");
+          tr.style.border = "1px solid black";
+          row.columns.forEach(col => {
+            if (index == 0) {
+              let th = document.createElement("th");
+              th.style.fontWeight = "bold";
+              th.style.color = "#1775BE";
+              th.style.border = "1px solid black";
+              th.innerHTML = col.colName;
+              rowMaster.appendChild(th);
+            } else {
+              let td = document.createElement("td");
+              // td.style.fontWeight = "bold";
+              td.style.border = "1px solid black";
+              td.innerHTML = !!col.colField ? col.isCurrency ? this.formatMoney(col.colField) : col.colField : "-";
+              tr.appendChild(td);
             }
-            td.style.fontWeight = "bold";
-            td.style.border = "1px solid black";
-            td.innerHTML = col;
-            tr.appendChild(td);
+          });
+          if (index == 0) {
+            table.appendChild(rowMaster);
           }
+          table.appendChild(tr);
         });
-        if (index == 0) {
-          table.appendChild(rowMaster);
-        }
-        table.appendChild(tr);
-      });
-      // document.body.appendChild(table);
-      this.renderer.appendChild(this.tableContainer.nativeElement, table)
-    } else {
-      window.alert("Estrazione vuota!");
-    }
+        // document.body.appendChild(table);
+        this.renderer.appendChild(this.tableContainer.nativeElement, table)
+      } else {
+        window.alert("Estrazione vuota!");
+      }
+    });
+
   }
 
   exportAsExcel() {
@@ -120,6 +123,22 @@ export class ExtractionComponent {
       link.href = uri + base64(format(template, blobData));
       link.download = filename + ".xls";
       link.click();
+    }
+  }
+
+  /**
+   * Formatta gli importi
+   * @param amount 
+   */
+  formatMoney(amount: string, currency?: string): string {
+    if (!!amount && !isNaN(parseFloat(amount))) {
+      let formatted: string = (new Intl.NumberFormat('it-IT', {
+        style: 'currency',
+        currency: currency || 'EUR',
+      }).format(parseFloat(amount)));
+      return currency ? formatted : formatted.substr(0, formatted.length - 2);
+    } else {
+      return amount;
     }
   }
 

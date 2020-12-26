@@ -17,22 +17,22 @@ export class ExtractionService {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.extractionList = [];
-            let serviceData: Exctraction[] = JSON.parse(sessionStorage.getItem('serviceData'));
+            let parsed;
+            try {
+                parsed = JSON.parse(sessionStorage.getItem('serviceData'));
+            } catch (error) {
+                console.warn("JSON.parse ERROR");
+                // throw new Error("JSON.parse ERROR");
+            }
+            let serviceData: Exctraction[] = parsed;
             if (!!serviceData) {
                 serviceData.forEach(servExt => {
-                    let ext: Exctraction = {
-                        date: new Date(servExt.date),
-                        data: servExt.data,
-                        rawMap: new Map(),
-                        refineMap: new Map()
-                    };
-                    let mapindex: number = -1;
-                    servExt.data.forEach((row, ri) => {
-                        let out = this.populateMap(row, ext, mapindex);
-                        ext = out.ext;
-                        mapindex = out.mapindex;
-                    });
-                    this.extractionList.push(ext);
+                    this.extractionList.push(
+                        new Exctraction(
+                            new Date(servExt.date),
+                            servExt.rawData
+                        )
+                    );
                 });
             }
             resolve();
@@ -42,13 +42,16 @@ export class ExtractionService {
     saveUploaded(fileDate: string) {
         !!this.exceltoJson && Object.keys(this.exceltoJson).forEach(key => {
             if (key.startsWith("sheet")) {
-                let ext: Exctraction = {
-                    date: new Date(fileDate),
-                    data: [],
-                    rawMap: new Map(),
-                    refineMap: new Map()
-                };
-                let mapindex: number = -1;
+                let date = new Date(fileDate);
+                let wsname = key.split("_");
+                if (
+                    wsname.length > 1
+                    && typeof wsname[1] == "string"
+                    && !isNaN(Date.parse(wsname[1]))
+                ) {
+                    date = new Date(wsname[1]);
+                }
+                let data: any[] = [];
                 !!this.exceltoJson[key] && this.exceltoJson[key].forEach((row, ri) => {
                     let newRow = {};
                     Object.keys(row).forEach((rowkey, i) => {
@@ -62,36 +65,13 @@ export class ExtractionService {
                         // delete row[rowkey];
                     })
                     if (Object.keys(newRow).find(rowkey => stringsNotNull(newRow[rowkey]))) {
-                        ext.data.push(newRow);
-                        let out = this.populateMap(newRow, ext, mapindex);
-                        ext = out.ext;
-                        mapindex = out.mapindex;
+                        data.push(newRow);
                     }
                 });
-                ext.data.length > 0 && this.extractionList.push(ext);
+                data.length > 0 && this.extractionList.push(new Exctraction(date, data));
             }
         });
         sessionStorage.setItem('serviceData', JSON.stringify(this.extractionList));
-    }
-
-    populateMap(row: any, ext: Exctraction, mapindex: number): { ext: Exctraction, mapindex: number } {
-        let firstKey: string = row[Object.keys(row)[0]];
-        if (firstKey == 'Descrizione') {
-            mapindex++;
-            ext.rawMap.set(mapindex, [row]);
-        } else if (ext.rawMap.has(mapindex)) {
-            ext.rawMap.get(mapindex).push(row);
-        }
-        if (firstKey.startsWith("TOT")) {
-            let arr = firstKey.split(" ");
-            arr.splice(0,1);
-            ext.refineMap.set(
-                arr.join(" "),
-                ext.rawMap.get(mapindex)
-            );
-            mapindex++;
-        }
-        return { ext: ext, mapindex: mapindex };
     }
 
     uploadExcel(event: any) {
@@ -114,7 +94,7 @@ export class ExtractionService {
                 const wsname: string = wb.SheetNames[i];
                 const ws: XLSX.WorkSheet = wb.Sheets[wsname];
                 const data: { "": number | string }[] = XLSX.utils.sheet_to_json(ws, { blankrows: false }); // to get 2d array pass 2nd parameter as object {header: 1}
-                this.exceltoJson[`sheet${i + 1}`] = data;
+                this.exceltoJson[`sheet${i + 1}_${wsname}`] = data;
                 const headers: string[] = this.getHeaderRow(ws);
                 headerJson[`header${i + 1}`] = headers;
                 //  console.log("json",headers)
