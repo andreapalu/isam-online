@@ -28,12 +28,12 @@ export class ExtractionComponent {
     this.selectedDate = ext.date;
     this.selectedExtraction = ext;
     this.extractionTypeList = [];
-    this.selectedExtraction.refineMap.forEach((value, key) => { this.extractionTypeList.push(key) });
+    this.selectedExtraction.parsedData.forEach((value) => { this.extractionTypeList.push(value.extractionLabel) });
     this.showExtraction();
   }
 
   showSingleExtraction(extKey: string) {
-    if (this.selectedExtraction.refineMap.has(extKey)) {
+    if (this.selectedExtraction.parsedData.find(el => el.extractionLabel == extKey)) {
       this.selectedExtractionDeatil = extKey;
       this.showExtraction(this.selectedExtraction.parsedData.find(el => el.extractionLabel == extKey))
     } else {
@@ -51,8 +51,11 @@ export class ExtractionComponent {
       selectedExtractions = this.selectedExtraction.parsedData;
     }
 
-    let oldTable = document.getElementById("generatedExtractionTable");
-    !!oldTable && document.getElementById("generatedExtractionTable").parentNode.removeChild(oldTable);
+    let oldTables = document.getElementsByClassName("generatedExtractionTable");
+    let length = oldTables.length;
+    for (var i = 0; i < length; ++i) {
+      oldTables[oldTables.length - 1].parentNode.removeChild(oldTables[oldTables.length - 1]);
+    }
 
     (selectedExtractions || []).forEach(selectedExtraction => {
       if (
@@ -64,6 +67,7 @@ export class ExtractionComponent {
 
         let table = document.createElement("table");
         table.id = "generatedExtractionTable";
+        table.className = "generatedExtractionTable";
         table.style.border = "1px solid black";
         let rowMaster = document.createElement("tr");
         rowMaster.style.fontWeight = "bold";
@@ -94,7 +98,6 @@ export class ExtractionComponent {
           }
           table.appendChild(tr);
         });
-        // document.body.appendChild(table);
         this.renderer.appendChild(this.tableContainer.nativeElement, table)
       } else {
         window.alert("Estrazione vuota!");

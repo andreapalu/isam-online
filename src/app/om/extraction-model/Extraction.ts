@@ -1,7 +1,6 @@
 export class Exctraction {
   date: Date;
   rawData: any[];
-  refineMap?: Map<string, any[]> = new Map();
   parsedData?: ExtractionDetail[] = [];
 
   constructor(
@@ -10,10 +9,8 @@ export class Exctraction {
   ) {
     this.date = date;
     this.rawData = rawData;
-    this.refineMap = new Map();
-    this.refineMap = populateMap(rawData, this.refineMap);
     this.parsedData = [];
-    this.refineMap.forEach((value, key) => {
+    populateMap(rawData).forEach((value, key) => {
       this.parsedData.push(new ExtractionDetail(key, value));
     })
   }
@@ -22,10 +19,10 @@ export class Exctraction {
 
 function populateMap(
   data: any[],
-  refineMap: Map<string, any[]>,
 ): Map<string, any[]> {
   let mapindex: number = -1;
   let rawMap = new Map();
+  let refineMap = new Map()
   data.forEach(row => {
     let firstKey: string = row[Object.keys(row)[0]];
     if (firstKey == 'Descrizione') {
