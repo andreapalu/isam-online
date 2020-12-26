@@ -1,0 +1,64 @@
+<div *ngIf="chartTitle" class="row" [style.width.px]="view[0]">
+    <div class="col-24">
+        <p style="font-size: 18px; margin: 10px 0px; text-align: center;">{{chartTitle}}</p>
+    </div>
+</div>
+<div class="row" style="background-color: #f8f8f8; padding-top: 20px; margin-bottom: 10px;" [style.width.px]="view[0]">
+    <div class="col-5">
+        <p style="text-align: center; font-size: 12px; font-weight: bold;">Legenda</p>
+    </div>
+    <div class="col-19">
+        <div class="row">
+            <div class="col" *ngFor="let series of legend; index as i" style="min-width: 250px;">
+                <p style="font-size: 14px;">
+                    <span style="font-size: 10px;" class="isp-font-icona-in-offerta-v1"
+                        [style.color]="scheme.domain[i]"></span>
+                    {{series}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-24">
+        <ngx-charts-chart [view]="view" [activeEntries]="activeEntries">
+            <svg:g [attr.transform]="transform" class="line-chart chart">
+                <svg:g ngx-charts-x-axis *ngIf="xAxis" [xScale]="xScale" [dims]="dims" [showGridLines]="false"
+                    [showLabel]="showXAxisLabel" [labelText]="'xAxisLabel'" [tickFormatting]="xAxisTickFormatting"
+                    [ticks]="xAxisTicks" (dimensionsChanged)="updateXAxisHeight($event)">
+                </svg:g>
+                <svg:g ngx-charts-y-axis *ngIf="yAxis" [yScale]="yScale" [dims]="dims" [showGridLines]="showGridLines"
+                    [showLabel]="showYAxisLabel" [labelText]="'yAxisLabel'" [tickFormatting]="yAxisTickFormatting"
+                    [ticks]="yAxisTicks" [referenceLines]="referenceLines" [showRefLines]="showRefLines"
+                    [showRefLabels]="showRefLabels" (dimensionsChanged)="updateYAxisWidth($event)">
+                </svg:g>
+                <svg:g>
+                    <svg:g *ngFor="let series of data; trackBy:trackBy; index as i">
+                        <svg:g isam-line-serie [xScale]="xScale" [yScale]="yScale" [colors]="colors" [data]="series"
+                            [activeEntries]="activeEntries" [curve]="curve" [animations]="false" [index]="i"
+                            [scaleType]="scaleType" />
+                    </svg:g>
+                    <svg:g>
+                        <svg:g *ngFor="let series of data; index as i">
+                            <svg:g *ngFor="let x of series.series; index as i">
+                                <svg:g isam-circle-series #circle [xScale]="xScale" [yScale]="yScale" [colors]="colors"
+                                    [data]="series" [visibleValue]="x.name" [activeEntries]="activeEntries"
+                                    [morezIndex]="morezIndex" [tooltipDisabled]="tooltipDisabled"
+                                    [tooltipTemplate]="tooltipTemplate? tooltipTemplate : defaultTooltipTemplate"
+                                    (select)="onClick($event, series)" (activate)="onActivate($event,x)"
+                                    (deactivate)="onDeactivate($event)" />
+                            </svg:g>
+                        </svg:g>
+                    </svg:g>
+                </svg:g>
+            </svg:g>
+        </ngx-charts-chart>
+    </div>
+</div>
+
+<ng-template #defaultTooltipTemplate>
+    <p style="font-size: 14px; text-align: center; margin-bottom: 0;">{{actualSeries}} | <span
+            *ngIf="scaleType=='time'">{{actualDate| date:'dd.MM.yyyy'}}</span> <span
+            *ngIf="scaleType!='time'">{{actualDate}}</span></p>
+    <p style="font-size: 14px; text-align: center; margin-bottom: 0;">{{actualValue | currency:'':''}}</p>
+</ng-template>

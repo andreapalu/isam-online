@@ -9,3 +9,11 @@ table, th, td {
 .tableContainer{
   padding: 20px;
 }
+
+.row {
+  margin-top: 5px;
+}
+
+.class-test {
+  filter: invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%);
+}

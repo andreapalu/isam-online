@@ -1,3 +1,5 @@
+import { stringsNotNull } from "../../util/stringsNotNull";
+
 export class Exctraction {
   date: Date;
   rawData: any[];
@@ -143,11 +145,12 @@ export class ExtractionRow {
       this.columns.push(
         new ExtractionColumn(
           col.colName,
-          extraction[col.colField],
+          stringsNotNull(col.action) ? col.action : extraction[col.colField],
           col.colWidth,
           col.headerTooltip,
           col.isCurrency,
-          col.inRowExpander
+          col.inRowExpander,
+          col.action
         )
       )
     });
@@ -161,13 +164,15 @@ export class ExtractionColumn {
   headerTooltip?: string;
   isCurrency?: boolean;
   inRowExpander?: boolean;
+  action?: string;
   constructor(
     colName: string,
     colField: string,
     colWidth?: string,
     headerTooltip?: string,
     isCurrency?: boolean,
-    inRowExpander?: boolean
+    inRowExpander?: boolean,
+    action?: string,
   ) {
     this.colName = colName;
     this.colField = colField;
@@ -175,6 +180,7 @@ export class ExtractionColumn {
     this.headerTooltip = headerTooltip;
     this.isCurrency = !!isCurrency;
     this.inRowExpander = !!inRowExpander;
+    this.action = action;
   }
 }
 
@@ -208,6 +214,10 @@ export function getExtractionType(key): string {
     default:
       return "not found";
   }
+}
+
+export const ActionIcon = {
+  _play: "play-circle.svg"
 }
 
 export const ExtractionTypes = {
@@ -263,6 +273,11 @@ export const ExtractionDetailMap: Map<string, ExtractionObj> = new Map([
           colName: "Controvalore",
           colField: "_counterValue",
           isCurrency: true
+        },
+        {
+          colName: "Vedi andamento",
+          colField: "",
+          action: ActionIcon._play
         }
       ]
     }

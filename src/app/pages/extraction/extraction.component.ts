@@ -1,13 +1,19 @@
-import { Component, ElementRef, Renderer2, ViewChild } from "@angular/core";
+import { Component, ElementRef, inject, Injector, Renderer2, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
+import { EventEmitter } from "events";
+import { emit } from "process";
+import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
 import { Exctraction, ExtractionDetail } from "../../om/extraction-model/Extraction";
 import { ExtractionService } from "../../service/extraction.service";
+import { NavigationManagerService } from "../../service/navigationManager.service";
+import { stringsNotNull } from "../../util/stringsNotNull";
 
 @Component({
   selector: "extraction",
   templateUrl: "./extraction.component.html",
   styleUrls: ["./extraction.component.scss"]
 })
-export class ExtractionComponent {
+export class ExtractionComponent extends BasePageComponent {
 
   /** Data selezionata */
   selectedDate: Date;
@@ -17,12 +23,31 @@ export class ExtractionComponent {
   extractionList: Exctraction[] = [];
   extractionTypeList: string[] = [];
 
+  groupedView: boolean = false;
+
   @ViewChild('tableContainer') tableContainer: ElementRef;
+  private eventEmitter: EventEmitter = new EventEmitter();
 
   constructor(
+    injector: Injector,
     private extractionService: ExtractionService,
     private renderer: Renderer2
-  ) { }
+  ) {
+    super(injector);
+  }
+
+  regroup(grouped: boolean) {
+    this.groupedView = grouped;
+    if (grouped) {
+      this.eventEmitter.emit("navigation")
+    } else {
+
+    }
+  }
+
+  goto(target: string, payload?: any) {
+    this.navigationManagerService.goTo(target, null, payload)
+  }
 
   selectDate(ext: Exctraction) {
     this.selectedDate = ext.date;
@@ -88,7 +113,32 @@ export class ExtractionComponent {
             } else {
               let td = document.createElement("td");
               td.style.border = "1px solid black";
-              td.innerHTML = !!col.colField ? col.isCurrency ? this.formatMoney(col.colField) : col.colField : "-";
+              if (stringsNotNull(col.action)) {
+                let img = document.createElement("img");
+                let nav = document.createElement("nav");
+                img.src = "../../../assets/icon/" + col.action;
+                img.title = col.action;
+                img.style.cursor = "pointer";
+                img.style.filter = "invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%)";
+                let a = document.createElement("a");
+                a.setAttribute("href", "/infografica");
+                a.setAttribute("routerLink", "/infografica");
+                a.setAttribute("routerLinkActive", "active");
+                img.onclick = function () {
+                  sessionStorage.setItem("infograficaPayload", JSON.stringify({ 
+                    table: selectedExtraction,
+                    row: row
+                   }));
+                  a.click()
+                };
+                td.style.textAlign = "center";
+                td.style.verticalAlign = "middle";
+                img.appendChild(a);
+                nav.appendChild(img);
+                td.appendChild(nav);
+              } else {
+                td.innerHTML = !!col.colField ? col.isCurrency ? this.formatMoney(col.colField) : col.colField : "-";
+              }
               tr.appendChild(td);
             }
           });

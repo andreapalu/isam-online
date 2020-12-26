@@ -1,0 +1,32 @@
+<div class="container-fluid">
+    {{graphTitle}}
+    <!-- <div *ngFor="let ext of extractionDetail" class="row">
+        <div *ngFor="let row of ext.rows" class="col-3">
+            <span *ngFor="let col of row.columns">{{col.colField}}<br></span>
+        </div>
+    </div> -->
+
+    <button (click)="test()">grafico</button>
+    <button (click)="generateGraph()">generateGraph()</button>
+    
+    <div class="row">
+        <div *ngIf="show" class="col">
+            <line-chart [data]="graphSource" [legend]="graphLegend" [morezIndex]="true"
+                [tooltipTemplate]="tooltipTemplate" [tooltipDisabled]="false"
+                [xAxisTickFormatting]="xFormatFn" [yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax">
+                <ng-template #tooltipTemplate let-model="model">
+                    <p *ngIf="type=='trendRate'" style="font-size: 10px; text-align: center; margin-bottom: 0;">
+                        TASSO
+                    </p>
+                    <p *ngIf="type=='trendRate'" style="font-size: 16px; text-align: center; margin-bottom: 0;">
+                        {{model.value}}%
+                    <p *ngIf="type!='trendRate'" style="font-size: 10px; text-align: center; margin-bottom: 0;">
+                        Valore importi
+                    </p>
+                    <p *ngIf="type!='trendRate'" style="font-size: 16px; text-align: center; margin-bottom: 0;">
+                        {{model.value|currency:'':'':'0.2-2'}}
+                </ng-template>
+            </line-chart>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@ import {
 @Component({
   selector: 'combo',
   templateUrl: './combo.component.html',
-  styleUrls: ['./combo.component.css'],
+  styleUrls: ['./combo.component.scss'],
 })
 export class ComboComponent {
 
