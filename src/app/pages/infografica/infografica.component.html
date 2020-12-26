@@ -1,19 +1,33 @@
 <div class="container-fluid">
-    {{graphTitle}}
-    <!-- <div *ngFor="let ext of extractionDetail" class="row">
-        <div *ngFor="let row of ext.rows" class="col-3">
-            <span *ngFor="let col of row.columns">{{col.colField}}<br></span>
-        </div>
-    </div> -->
+    <div class="row btn-group" role="group">
+        <button *ngIf="!extractionObj; else selectedDetail" type="button" class="btn btn-outline-primary">
+            Seleziona che dato graficare
+        </button>
+        <ng-template #selectedDetail>
+            <button type="button" class="btn btn-outline-primary">
+                {{graphTitle}}
+            </button>
+        </ng-template>
+        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+            data-toggle="dropdown" aria-expanded="false">
+            <span class="sr-only"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li *ngFor="let col of extractionObj.extractionColumns">
+                <a class="dropdown-item" (click)="generateGraph(col)">{{col.colName}}</a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" (click)="test()">Grafico d'esempio</a></li>
+        </ul>
+    </div>
 
-    <button (click)="test()">grafico</button>
-    <button (click)="generateGraph()">generateGraph()</button>
-    
     <div class="row">
         <div *ngIf="show" class="col">
             <line-chart [data]="graphSource" [legend]="graphLegend" [morezIndex]="true"
-                [tooltipTemplate]="tooltipTemplate" [tooltipDisabled]="false"
-                [xAxisTickFormatting]="xFormatFn" [yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax">
+                [tooltipTemplate]="tooltipTemplate" [tooltipDisabled]="false" [xAxisTickFormatting]="xFormatFn"
+                [yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax">
                 <ng-template #tooltipTemplate let-model="model">
                     <p *ngIf="type=='trendRate'" style="font-size: 10px; text-align: center; margin-bottom: 0;">
                         TASSO

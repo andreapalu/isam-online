@@ -1,6 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
-import { ExtractionDetail, ExtractionDetailMap, ExtractionObj, ExtractionRow } from "../../om/extraction-model/Extraction";
+import { ExtractionColumn, ExtractionDetail, ExtractionDetailMap, ExtractionObj, ExtractionRow } from "../../om/extraction-model/Extraction";
 import { ExtractionService } from "../../service/extraction.service";
 import { cloneDeep } from 'lodash';
 import { GraphData, Series } from "../../component/line-chart/line-chart-model";
@@ -14,6 +14,7 @@ import { parseDateNotNull, parseFloatNotNull } from "../../util/parseFunction";
 export class InfograficaComponent extends BasePageComponent {
 
   extractionDetail: ExtractionDetail;
+  extractionObj: ExtractionObj;
   selectedTitle: string;
 
   /** Line-chart */
@@ -60,6 +61,8 @@ export class InfograficaComponent extends BasePageComponent {
             extractionType: extractions[0].extractionType,
             rows: [...extractions.map(el => el.rows)][0]
           };
+          this.extractionObj = ExtractionDetailMap.get(this.extractionDetail.extractionType);
+
         }
         // sessionStorage.removeItem("infograficaPayload"); // TODO: RIPRISTINARE A SVILUPPI FINITI
       } else {
@@ -79,7 +82,7 @@ export class InfograficaComponent extends BasePageComponent {
   }
 
   /** Genera il grafico */
-  generateGraph() {
+  generateGraph(columSelected: ExtractionColumn) {
     this.resetGraph();
     if (!this.extractionDetail || !this.extractionDetail.rows) { // caso niente dati
       let emptySerie: GraphData = {
@@ -92,14 +95,13 @@ export class InfograficaComponent extends BasePageComponent {
       }
       this.graphSource.push(emptySerie);
     } else {
-      let extractionObj: ExtractionObj = ExtractionDetailMap.get(this.extractionDetail.extractionType);
       let dateIndex: number;
       let valueIndex: number;
-      extractionObj.extractionColumns.forEach((col, index) => {
+      this.extractionObj.extractionColumns.forEach((col, index) => {
         if (col.colField == "_date") {
           dateIndex = index;
         }
-        if (col.colField == "_counterValue") {
+        if (col.colField == columSelected.colField) {
           valueIndex = index;
         }
       });
