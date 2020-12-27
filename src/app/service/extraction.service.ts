@@ -20,9 +20,11 @@ export class ExtractionService {
             let parsed;
             try {
                 parsed = JSON.parse(sessionStorage.getItem('serviceData'));
+                if (!parsed) {
+                    throw new Error("JSON.parse ERROR at className: " + ExtractionService.name);
+                }
             } catch (error) {
-                console.warn("JSON.parse ERROR");
-                // throw new Error("JSON.parse ERROR");
+                console.warn(error);
             }
             let serviceData: Exctraction[] = parsed;
             if (!!serviceData) {

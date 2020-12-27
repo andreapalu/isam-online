@@ -33,7 +33,7 @@ function populateMap(
       rawMap.get(mapindex).push(row);
     }
     if (firstKey.toUpperCase().startsWith("TOT")) {
-      let key: string = manageTotRow(firstKey);
+      let key: string = manageTotCell(firstKey);
       if (stringsNotNull(key)) {
         refineMap.set(
           key,
@@ -43,7 +43,6 @@ function populateMap(
       mapindex++;
     }
   });
-  console.debug("_tot: " + JSON.stringify(_tot));
   let parsedMap: Map<string, ExtractionResource[]> = new Map(); // es <"AZIONI", <ExtractionResource[]>datiEstrazione>
   refineMap.forEach((value, key) => {
     try {
@@ -62,20 +61,14 @@ function populateMap(
   return parsedMap;
 }
 
-const _tot: string[] = [];
-function manageTotRow(firstKey: string): string {
+function manageTotCell(firstKey: string): string {
   firstKey = firstKey.replace("\r\n", " ");
   firstKey = firstKey.replace("TOT.", "TOT ");
-  if (!_tot.find(el => el == firstKey)) {
-    _tot.push(firstKey)
-  }
   let arr = firstKey.split(" ");
-  if (arr.length > 1) {
-    if (arr.length > 2 && stringsNotNull(arr[1])) {
-      arr.splice(0, 1);
-    }
+  if (arr.length > 1 && stringsNotNull(arr[1])) {
+    arr.splice(0, 1);
   }
-  return arr.join(" ");
+  return arr.join(" ").trim();
 }
 
 function dataToResource(extractionObj: ExtractionObj, extractionData: any[]): ExtractionResource[] {
