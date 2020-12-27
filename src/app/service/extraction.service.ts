@@ -47,9 +47,9 @@ export class ExtractionService {
                 if (
                     wsname.length > 1
                     && typeof wsname[1] == "string"
-                    && !isNaN(Date.parse(wsname[1]))
+                    // && !isNaN(Date.parse(wsname[1]))
                 ) {
-                    date = new Date(wsname[1]);
+                    date = this.getDateFromSheet(wsname[1]);
                 }
                 let data: any[] = [];
                 !!this.exceltoJson[key] && this.exceltoJson[key].forEach((row, ri) => {
@@ -72,6 +72,62 @@ export class ExtractionService {
             }
         });
         sessionStorage.setItem('serviceData', JSON.stringify(this.extractionList));
+    }
+
+    getDateFromSheet(wsname: any): Date {
+        if (typeof wsname == "string") {
+            if (wsname.length == 7) {
+                let day = parseInt(wsname.substr(0, 2));
+                let month = this.getMonth(wsname.substr(2, 3));
+                let year = parseInt("20" + wsname.substr(5, 2));
+                return new Date(year, month, day);
+            } else {
+                window.alert("Data di tipo stringa ma dimensione != 7: " + wsname);
+                return null;
+            }
+        } else if (wsname instanceof Number) {
+            window.alert("Data di tipo number: " + wsname);
+            return null;
+        }
+        return null;
+    }
+
+    getMonth(month: string): number {
+        switch (month.toLowerCase()) {
+            case "gen":
+                return 0;
+            case "feb":
+                return 1;
+            case "mar":
+                return 2;
+            case "apr":
+                return 3;
+            case "mag":
+            case "may":
+                return 4;
+            case "giu":
+            case "jun":
+                return 5;
+            case "lug":
+            case "jul":
+                return 6;
+            case "ago":
+            case "aug":
+                return 7;
+            case "set":
+            case "sep":
+                return 8;
+            case "ott":
+            case "oct":
+                return 9;
+            case "nov":
+                return 10;
+            case "dic":
+            case "dec":
+                return 11;
+            default:
+                return null;
+        }
     }
 
     uploadExcel(event: any) {

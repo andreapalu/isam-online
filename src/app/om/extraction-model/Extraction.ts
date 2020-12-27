@@ -34,20 +34,35 @@ function populateMap(
     }
     if (firstKey.startsWith("TOT")) {
       let arr = firstKey.split(" ");
-      arr.splice(0, 1);
-      refineMap.set(
-        arr.join(" "),
-        rawMap.get(mapindex)
-      );
+      if (arr.length > 1) {
+        if (arr.length > 2 && stringsNotNull(arr[1])) {
+          arr.splice(0, 1);
+        }
+      }
+      let key: string = arr.join(" ");
+      if (stringsNotNull(key)) {
+        refineMap.set(
+          key,
+          rawMap.get(mapindex)
+        );
+      }
       mapindex++;
     }
   });
   let parsedMap: Map<string, ExtractionResource[]> = new Map(); // es <"AZIONI", <ExtractionResource[]>datiEstrazione>
   refineMap.forEach((value, key) => {
-    parsedMap.set(
-      key,
-      dataToResource(ExtractionDetailMap.get(getExtractionType(key)), value)
-    )
+    try {
+      let extractionObj: ExtractionObj = ExtractionDetailMap.get(getExtractionType(key));
+      if (!extractionObj) {
+        throw new Error("Tipo estrazione not found");
+      }
+      parsedMap.set(
+        key,
+        dataToResource(extractionObj, value)
+      )
+    } catch (error) {
+      console.error("Catched error: "+error);
+    }
   })
   return parsedMap;
 }
