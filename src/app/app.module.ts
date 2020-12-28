@@ -59,6 +59,9 @@ export { ExtractionService } from "./service/extraction.service";
 import { NavigationManagerService } from "./service/navigationManager.service";
 export { NavigationManagerService } from "./service/navigationManager.service";
 
+import { CommunicationManagerService } from "./service/communicationManager.service";
+export { CommunicationManagerService } from "./service/communicationManager.service";
+
 export function initExtService(extractionService: ExtractionService): Function {
   return function () {
     return extractionService.init();
@@ -117,7 +120,9 @@ export const routerModuleForChild = RouterModule.forRoot([
       'deps': [ExtractionService],
       'multi': true
     },
-    NavigationManagerService
+    NavigationManagerService,
+    CommunicationManagerService,
+    // { provide: APPLICATION_BASE_URL, useValue: 'Hello world' }
   ]
 })
 export class AppModule {

@@ -2,6 +2,13 @@ import { Injectable } from "@angular/core";
 import { Exctraction } from "../om/extraction-model/Extraction";
 import * as XLSX from "xlsx";
 import { stringsNotNull } from "../util/stringsNotNull";
+import { CommunicationManagerService } from "./communicationManager.service";
+
+declare class AuthorResource {
+    id: number;
+    age: number;
+    name: string;
+}
 
 @Injectable({
     providedIn: "root"
@@ -12,17 +19,27 @@ export class ExtractionService {
 
     private exceltoJson = {};
 
-    constructor() { }
+    constructor(
+        private communicationManagerService: CommunicationManagerService
+    ) { }
 
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.extractionList = [];
+            // sessionStorage.removeItem('serviceData');
             let parsed;
             try {
                 parsed = JSON.parse(sessionStorage.getItem('serviceData'));
                 if (!parsed) {
                     throw new Error("JSON.parse ERROR at className: " + ExtractionService.name);
                 }
+                this.communicationManagerService.callMockService<AuthorResource[]>({ url: "author" }).subscribe(
+                    (response) => {
+                        !!response && response.forEach(auth => {
+                            console.warn("Author: " + auth.name);
+                        });
+                    }
+                );
             } catch (error) {
                 console.warn(error);
             }
@@ -151,7 +168,7 @@ export class ExtractionService {
             for (var i = 0; i < wb.SheetNames.length; ++i) {
                 const wsname: string = wb.SheetNames[i];
                 const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-                const data: { "": number | string }[] = XLSX.utils.sheet_to_json(ws, { blankrows: false }); // to get 2d array pass 2nd parameter as object {header: 1}
+                const data: { "": number | string }[] = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
                 this.exceltoJson[`sheet${i + 1}_${wsname}`] = data;
                 const headers: string[] = this.getHeaderRow(ws);
                 headerJson[`header${i + 1}`] = headers;
@@ -162,7 +179,7 @@ export class ExtractionService {
         };
     }
 
-    getHeaderRow(sheet): string[] {
+    getHeaderRow(sheet: XLSX.WorkSheet): string[] {
         let headers: string[] = [];
         let range: XLSX.Range = XLSX.utils.decode_range(sheet['!ref']);
         let columnNumber: number = range.s.c;

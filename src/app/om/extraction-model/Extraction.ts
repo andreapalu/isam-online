@@ -26,7 +26,7 @@ function populateMap(
   let refineMap: Map<string, any[]> = new Map(); // es <"AZIONI", datiEstrazione>
   (data || []).forEach(row => { // build refinedMap
     let firstKey: string = row[Object.keys(row)[0]];
-    if (firstKey == 'Descrizione') {
+    if (!!firstKey && firstKey.toUpperCase().trim() == 'DESCRIZIONE') {
       mapindex++;
       rawMap.set(mapindex, [row]);
     } else if (rawMap.has(mapindex)) {
@@ -101,7 +101,7 @@ function dataToResource(extractionObj: ExtractionObj, extractionData: any[]): Ex
   return output;
 }
 
-class ExtractionResource {
+interface ExtractionResource {
   _description?: string;
   _quantity?: string;
   _avarageChargePrice?: number;
@@ -116,6 +116,10 @@ class ExtractionResource {
 
 
 // ---------- EXTRACTION CLASSES ----------
+
+export interface pippo {
+  pippo(param: string): void;
+}
 
 export class ExtractionDetail {
   extractionLabel: string;
@@ -217,18 +221,18 @@ export class ExtractionObj {
 
 // ---------- CONST ----------
 
-export function getExtractionType(key): string {
-  switch (key) {
-    case "Azioni":
-    case "Obbligazioni":
-    case "Titoli Di Stato":
+export function getExtractionType(key: string): string {
+  switch (key.toUpperCase().trim()) {
+    case "AZIONI":
+    case "OBBLIGAZIONI":
+    case "TITOLI DI STATO":
     case "ETF":
     case "ETC":
-    case "Certificates":
+    case "CERTIFICATES":
       return ExtractionTypes._financialInvestments;
-    case "Polizze":
+    case "POLIZZE":
       return ExtractionTypes._insurances;
-    case "Fondi comuni":
+    case "FONDI COMUNI":
       return ExtractionTypes._founds;
     default:
       return "not found";
@@ -249,7 +253,7 @@ export const ExtractionDetailMap: Map<string, ExtractionObj> = new Map([
   [
     ExtractionTypes._financialInvestments,
     {
-      extractionLabel: "Investimenti finanziari",
+      extractionLabel: ExtractionTypes._financialInvestments,
       extractionColumns: [
         {
           colName: "Descrizione",

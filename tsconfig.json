@@ -1,48 +1,13 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "rootDir": "./src",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    // "module": "esnext",
     "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "ES6",
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    // "module": "commonjs",
-    // "types": [
-    //   "jasmine",
-    //   "node"
-    // ],
-    "module": "es2015",
-    // "types": ["jest"]
-    "types": []
-  },
-  "files": [
-    "src/test.ts"
-  ],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ],
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
-  // ,
-  // "angularCompilerOptions": {
-  //   "enableIvy": true,
-  //   "fullTemplateTypeCheck": true,
-  //   "strictInjectionParameters": true
-  // }
+  }
 }

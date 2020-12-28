@@ -6,6 +6,7 @@ import {
   Component, DoCheck, Injector, OnChanges, OnDestroy, OnInit, Optional, SimpleChanges
 } from '@angular/core';
 import { isNullOrUndefined } from 'util';
+import { CommunicationManagerService } from '../../service/communicationManager.service';
 import { NavigationManagerService } from '../../service/navigationManager.service';
 
 @Component({
@@ -19,12 +20,14 @@ export abstract class BasePageComponent implements
   OnDestroy {
 
   protected navigationManagerService: NavigationManagerService;
+  protected communicationManagerService: CommunicationManagerService;
 
   constructor(
     @Optional() protected injector?: Injector
   ) {
     if (!isNullOrUndefined(this.injector)) {
       this.navigationManagerService = this.injector.get(NavigationManagerService);
+      this.communicationManagerService = this.injector.get(CommunicationManagerService);
     }
   }
 
