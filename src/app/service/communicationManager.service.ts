@@ -55,14 +55,21 @@ export class CommunicationManagerService {
                 return this.httpClient.patch<T>(finalUrl, request.httpOptions);
             case HttpVerbs.post:
                 if (!!request.body) {
-                    if (!!request.body['id'] && typeof request.body['id'] == "number") {
-                        request.httpOptions = request.body
+                    if (BaseServerResource.prototype.parseBaseServerResource(request.body)) {
+                        request.httpOptions = request.body;
                     } else {
                         throw new Error("INVALID RESOURCE FOR METHOD " + request.apiMethod);
                     }
                 }
                 return this.httpClient.post<T>(finalUrl, request.httpOptions);
             case HttpVerbs.put:
+                if (!!request.body) {
+                    if (BaseServerResource.prototype.parseBaseServerResource(request.body)) {
+                        request.httpOptions = request.body;
+                    } else {
+                        throw new Error("INVALID RESOURCE FOR METHOD " + request.apiMethod);
+                    }
+                }
                 return this.httpClient.put<T>(finalUrl, request.httpOptions);
             default:
                 return null;

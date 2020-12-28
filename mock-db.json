@@ -2,18 +2,27 @@
   "author": [
     {
       "id": 1,
+      "name": "Andrea",
       "age": 30,
-      "name": "Andrea"
+      "insertDate": "2020-12-28T18:58:04.128Z",
+      "lastUpdate": "2020-12-28T18:58:04.128Z",
+      "lastUpdateUser": "FE_CLIENT"
     },
     {
       "id": 2,
-      "name": "Test",
-      "age": 18
+      "name": "Andrea",
+      "age": 31,
+      "insertDate": "2020-12-28T18:59:44.943Z",
+      "lastUpdate": "2020-12-28T18:59:44.943Z",
+      "lastUpdateUser": "FE_CLIENT"
     },
     {
       "id": 3,
-      "name": "anna",
-      "age": 28
+      "name": "Marco",
+      "age": 21,
+      "insertDate": "2020-12-28T19:04:41.008Z",
+      "lastUpdate": "2020-12-28T19:04:41.008Z",
+      "lastUpdateUser": "FE_CLIENT"
     }
   ],
   "comments": [

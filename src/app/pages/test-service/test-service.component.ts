@@ -5,7 +5,7 @@ import { BasePageComponent } from "../../component/BasePageComponent/base-page.c
 import { HttpVerbs } from "../../service/communicationManager.service";
 import { AuthorResource } from "../../om/json-server.model/Author";
 import { Observable } from "rxjs";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, NgForm, ValidationErrors, Validators } from "@angular/forms";
 
 @Component({
   selector: "test-service",
@@ -41,21 +41,68 @@ export class TestServiceComponent extends BasePageComponent {
     super(injector);
   }
 
-  onInit(){
+  insertAuthorForm: FormGroup;
+  createForm() {
+    this.insertAuthorForm = this.fb.group({
+      id: ['', [Validators.required, this.notValidId]],
+      name: ['', [Validators.required, this.stringWoSpaces, Validators.minLength(3)]],
+      age: ['', Validators.required]
+    });
+  }
+  onInit() {
     this.getAuthors();
   }
 
-  showForm() {
+  showForm(form?: NgForm) {
+    !!form && form.reset();
     this.showInsertForm = !this.showInsertForm;
+    this.createForm();
   }
 
-  onSubmit(form: { value: any }) {
+  onSubmit(form: NgForm) {
     try {
       let aut: AuthorResource = form.value;
+      aut.insertDate = new Date();
+      aut.lastUpdate = new Date();
+      aut.lastUpdateUser = "FE_CLIENT";
       this.postAuth(aut);
+      this.showForm(form);
     } catch (error) {
       console.error(error);
     }
+  }
+
+  stringWoSpaces(control: AbstractControl): ValidationErrors | null {
+    if (control.value && (control.value as string).indexOf(' ') >= 0) {
+      return { shouldNotHaveSpaces: true };
+    }
+    return null;
+  }
+
+  notValidId(control: AbstractControl): ValidationErrors | null {
+    let table = document.getElementById('autorTable');
+    let authorsId: number[] = [];
+    if (!!table && !!table.children && table.children.length > 0) {
+      let idIndex: number;
+      let tbody: any = table.children[0];
+      if (!!tbody && !!tbody.rows && tbody.rows.length > 1) {
+        for (let index = 0; index < tbody.rows.length; index++) {
+          const row: any = tbody.rows[index];
+          if (index == 0) {
+            for (let i = 0; i < (row.cells as HTMLCollection).length; i++) { let cell = row.cells[i]; if ((cell.innerHTML as string).toLowerCase() == 'id') { idIndex = i; } });
+          } else {
+            authorsId.push(parseInt(row.cells[idIndex].innerHTML as string));
+          }
+        }
+      }
+      if (authorsId.find(el => el == (control.value as number))) {
+        return { idAlreadyUsed: true };
+      }
+      if ((control.value as number) == 0) {
+        return { invalidId: true };
+      }
+    }
+    return null;
   }
 
   authors: AuthorResource[] = [];

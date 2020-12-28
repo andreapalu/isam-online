@@ -3,21 +3,58 @@
 	getAuthors
 </button>
 <br><br> -->
+	<div *ngIf="false" style="text-align:center">
+		<form [formGroup]="angForm" novalidate>
+			<div class="form-group">
+				<label class="center-block">Name:
+					<input class="form-control" formControlName="name">
+				</label>
+				<ng-container *ngTemplateOutlet="newError; context: { model: id, label: 'name' }">
+				</ng-container>
+			</div>
+			<div class="form-group">
+				<label class="center-block">Surname:
+					<input class="form-control" formControlName="surname">
+				</label>
+				<ng-container *ngTemplateOutlet="newError; context: { model: id, label: 'surname' }">
+				</ng-container>
+			</div>
+			<ng-template #newError let-label="label">
+				<div *ngIf="angForm.controls[label].invalid && (angForm.controls[label].dirty || angForm.controls[label].touched)"
+					class="alert alert-danger">
+					<div *ngIf="angForm.controls[label].errors.required">
+						{{label || 'This field'}} is required.
+					</div>
+					<div *ngIf="angForm.controls[label].errors.shouldNotHaveSpaces">
+						{{label || 'This field'}} should not have spaces.
+					</div>
+				</div>
+			</ng-template>
+		</form>
+		<p>Form value: {{ angForm.value | json }}</p>
+		<p>Form status: {{ angForm.status | json }}</p>
+	</div>
 	<button (click)="showForm()">Inserisci autore</button>
-	<form *ngIf="showInsertForm" #insertAuthorForm="ngForm" (ngSubmit)="onSubmit(insertAuthorForm)"
+	<form *ngIf="showInsertForm" [formGroup]="insertAuthorForm" novalidate (ngSubmit)="onSubmit(insertAuthorForm)"
 		class="form form-register">
 		<div class="row mb-3">
 			<div class="col-2">
 				<label for="idInput" class="form-label">ID</label>
-				<input type="number" required class="form-control" min="1" id="idInput" name="id" ngModel>
+				<input type="number" class="form-control" id="idInput" min="1" formControlName="id">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'id', label: 'ID' }">
+				</ng-container>
 			</div>
 			<div class="col-3">
 				<label for="name" class="form-label">Nome</label>
-				<input type="text" required class="form-control" id="name" name="name" ngModel>
+				<input type="text" class="form-control" id="name" formControlName="name">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'name', label: 'Nome' }">
+				</ng-container>
 			</div>
 			<div class="col-1">
 				<label for="age" class="form-label">Età</label>
-				<input type="number" required class="form-control" min="0" id="age" name="age" ngModel>
+				<input type="number" class="form-control" id="age" formControlName="age">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'age', label: 'Età' }">
+				</ng-container>
 			</div>
 			<!-- <div class="col-1">
 				<label for="pristine" class="form-label">pristine</label>
@@ -27,6 +64,40 @@
 				<label for="invalid" class="form-label">invalid</label>
 				<input style="width: inherit;" disabled id="invalid" [value]="insertAuthorForm.invalid">
 			</div> -->
+			<ng-template #inputError let-name="name" let-label="label">
+				<div *ngIf="insertAuthorForm.controls[name].invalid && (insertAuthorForm.controls[name].dirty || insertAuthorForm.controls[name].touched)"
+					class="alert alert-danger">
+					<div *ngIf="insertAuthorForm.controls[name].errors.required">
+						{{label || 'Il campo'}} è required.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.shouldNotHaveSpaces">
+						{{label || 'Il campo'}} contiene spazi.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.idAlreadyUsed">
+						Questo {{label || 'Il campo'}} è già utilizzato.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.invalidId">
+						Questo {{label || 'Il campo'}} non è valido.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.max">
+						{{label || 'Il campo'}} deve essere minore di
+						{{insertAuthorForm.controls[name].errors.max.max}}.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.min">
+						{{label || 'Il campo'}} deve essere maggiore di
+						{{insertAuthorForm.controls[name].errors.min.min}}.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.maxlength">
+						{{label || 'Il campo'}} non può essere lungo più di
+						{{insertAuthorForm.controls[name].errors.maxlength.requiredLength}} caratteri.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.minlength">
+						{{label || 'Il campo'}} deve avere almeno
+						{{insertAuthorForm.controls[name].errors.minlength.requiredLength}} caratteri.
+					</div>
+				</div>
+			</ng-template>
+
 		</div>
 		<button type="submit" class="btn btn-primary"
 			[disabled]="insertAuthorForm.pristine || insertAuthorForm.invalid">
@@ -35,7 +106,7 @@
 	</form>
 	<br><br>
 
-	<table>
+	<table id="autorTable">
 		<tr>
 			<th style="width: 200px;">name</th>
 			<th style="width: 100px;">age</th>
