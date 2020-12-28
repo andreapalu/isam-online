@@ -36,8 +36,9 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json",
-    "api": "json-server mock.json --no-cors=true",
+    "start": "start json-server mock-db.json --no-cors=true && ng serve",
+    "start-proxy": "ng serve --proxy-config proxy.conf.json",
+    "json-server": "json-server mock-db.json --no-cors=true",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
