@@ -9,10 +9,14 @@ export class BaseServerResource {
         this.lastUpdate = new Date();
         this.lastUpdateUser = "";
     }
+    /**
+     * Return true only if the resource has all the attributes of this class && id != 0
+     * @param object 
+     */
     parseBaseServerResource(object: any): boolean {
         if (!!object) {
-            let res = new BaseServerResource();
-            return Object.keys(res).every(key => !!object[key] && typeof object[key] == typeof res[key]);
+            let checkObj = new BaseServerResource();
+            return Object.keys(checkObj).every(key => !!object[key] && typeof object[key] == typeof checkObj[key]);
         } else {
             return false;
         }

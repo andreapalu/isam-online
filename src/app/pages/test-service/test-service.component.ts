@@ -89,7 +89,12 @@ export class TestServiceComponent extends BasePageComponent {
         for (let index = 0; index < tbody.rows.length; index++) {
           const row: any = tbody.rows[index];
           if (index == 0) {
-            for (let i = 0; i < (row.cells as HTMLCollection).length; i++) { let cell = row.cells[i]; if ((cell.innerHTML as string).toLowerCase() == 'id') { idIndex = i; } });
+            for (let i = 0; i < (row.cells as HTMLCollection).length; i++) {
+              let cell = row.cells[i];
+              if ((cell.innerHTML as string).toLowerCase() == 'id') {
+                idIndex = i;
+              }
+            }
           } else {
             authorsId.push(parseInt(row.cells[idIndex].innerHTML as string));
           }
