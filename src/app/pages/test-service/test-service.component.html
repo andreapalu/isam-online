@@ -1,31 +1,93 @@
-<button (click)="tryService()">
-	recupera dati
+<div class="container-fluid">
+	<!-- <button (click)="getAuthors()">
+	getAuthors
 </button>
-<br><br>
+<br><br> -->
+	<button (click)="showForm()">Inserisci autore</button>
+	<form *ngIf="showInsertForm" #insertAuthorForm="ngForm" (ngSubmit)="onSubmit(insertAuthorForm)"
+		class="form form-register">
+		<div class="row mb-3">
+			<div class="col-2">
+				<label for="idInput" class="form-label">ID</label>
+				<input type="number" required class="form-control" min="1" id="idInput" name="id" ngModel>
+			</div>
+			<div class="col-3">
+				<label for="name" class="form-label">Nome</label>
+				<input type="text" required class="form-control" id="name" name="name" ngModel>
+			</div>
+			<div class="col-1">
+				<label for="age" class="form-label">Età</label>
+				<input type="number" required class="form-control" min="0" id="age" name="age" ngModel>
+			</div>
+			<!-- <div class="col-1">
+				<label for="pristine" class="form-label">pristine</label>
+				<input style="width: inherit;" disabled id="pristine" [value]="insertAuthorForm.pristine">
+			</div>
+			<div class="col-1">
+				<label for="invalid" class="form-label">invalid</label>
+				<input style="width: inherit;" disabled id="invalid" [value]="insertAuthorForm.invalid">
+			</div> -->
+		</div>
+		<button type="submit" class="btn btn-primary"
+			[disabled]="insertAuthorForm.pristine || insertAuthorForm.invalid">
+			Inserisci
+		</button>
+	</form>
+	<br><br>
 
-<ng-container *ngIf="outPresent">
-	<strong>Conta: {{users.length}}</strong><br><br>
-	<ng-container *ngFor="let user of users">
-		userId: {{user.userId}}<br>
-		id: {{user.id}}<br>
-		title: {{user.title}}<br>
-		body: {{user.body}}<br><br>
+	<table>
+		<tr>
+			<th style="width: 200px;">name</th>
+			<th style="width: 100px;">age</th>
+			<th style="width: 100px;">id</th>
+			<th style="width: 200px;"> azioni</th>
+		</tr>
+		<!-- <tr *ngFor="let auth of authors$ | async"> -->
+		<tr *ngFor="let auth of authors">
+			<td>{{auth.name}}</td>
+			<td>{{auth.age}}</td>
+			<td>{{auth.id}}</td>
+			<td>
+				<img src="../../../assets/icon/trash.svg"
+					style="cursor:pointer; filter:invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%);"
+					(click)="deleteAuth(auth)">
+			</td>
+		</tr>
+	</table>
+
+
+	<ng-container *ngIf="oldService">
+		<button (click)="tryService()">
+			recupera dati
+		</button>
+		<br><br>
+
+		<ng-container *ngIf="outPresent">
+			<strong>Conta: {{users.length}}</strong><br><br>
+			<ng-container *ngFor="let user of users">
+				userId: {{user.userId}}<br>
+				id: {{user.id}}<br>
+				title: {{user.title}}<br>
+				body: {{user.body}}<br><br>
+			</ng-container>
+		</ng-container>
+
+		<div class="row">
+			<p>
+				Course Name : </p><input type="text" [(ngModel)]=searchString>
+			<div class="col-4">
+				<button (click)="searchImages()">Search OK</button>
+			</div>
+			<div class="col-4">
+				<button (click)="fetchImages()">Search EXP</button>
+			</div>
+		</div>
+
+		<ul>
+			<li *ngFor="let image1 of imageSearch">
+				<img src="{{image1.owner.avatar_url}}">
+			</li>
+		</ul>
 	</ng-container>
-</ng-container>
 
-<div class="row">
-	<p>
-		Course Name : </p><input type="text" [(ngModel)]=searchString>
-	<div class="col-4">
-		<button (click)="searchImages()">Search OK</button>
-	</div>
-	<div class="col-4">
-		<button (click)="fetchImages()">Search EXP</button>
-	</div>
 </div>
-
-<ul>
-	<li *ngFor="let image1 of imageSearch">
-		<img src="{{image1.owner.avatar_url}}">
-	</li>
-</ul>

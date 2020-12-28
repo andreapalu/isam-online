@@ -1,6 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
-import { ExtractionColumn, ExtractionDetail, ExtractionDetailMap, ExtractionObj, ExtractionRow } from "../../om/extraction-model/Extraction";
+import { ExtractionColumn, ExtractionDetail, ExtractionDetailMap, ExtractionObj, ExtractionRow } from "../../om/extraction.model/Extraction";
 import { ExtractionService } from "../../service/extraction.service";
 import { cloneDeep } from 'lodash';
 import { GraphData, Series } from "../../component/line-chart/line-chart-model";

@@ -1,13 +1,18 @@
-import { Component, VERSION } from "@angular/core";
+import { Component, ContentChildren, Injector, VERSION, QueryList } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { StockService } from "../../service/stock.service";
+import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
+import { HttpVerbs } from "../../service/communicationManager.service";
+import { AuthorResource } from "../../om/json-server.model/Author";
+import { Observable } from "rxjs";
+import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "test-service",
   templateUrl: "./test-service.component.html",
   styleUrls: ["./test-service.component.scss"]
 })
-export class TestServiceComponent {
+export class TestServiceComponent extends BasePageComponent {
   name = "Angular " + VERSION.major;
 
   public out: string;
@@ -24,10 +29,98 @@ export class TestServiceComponent {
     { symbol: "CVS", name: "CVS Pharmacy" }
   ];
 
+  oldService: boolean = false;
+  showInsertForm: boolean = false;
+
   constructor(
+    injector: Injector,
+    private fb: FormBuilder,
     private httpClient: HttpClient,
     private stockService: StockService
-  ) {}
+  ) {
+    super(injector);
+  }
+
+  onInit(){
+    this.getAuthors();
+  }
+
+  showForm() {
+    this.showInsertForm = !this.showInsertForm;
+  }
+
+  onSubmit(form: { value: any }) {
+    try {
+      let aut: AuthorResource = form.value;
+      this.postAuth(aut);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  authors: AuthorResource[] = [];
+  authors$: Observable<AuthorResource[]> = this.communicationManagerService.callMockService<AuthorResource[]>(
+    {
+      url: "author",
+      apiMethod: HttpVerbs.get
+    }
+  );
+
+  getAuthors() {
+    this.communicationManagerService.callMockService<AuthorResource[]>(
+      {
+        url: "author",
+        apiMethod: HttpVerbs.get
+      }
+    ).subscribe(response => {
+      this.authors = response;
+    })
+  }
+
+  deleteAuth(auth: AuthorResource) {
+    this.communicationManagerService.callMockService<AuthorResource[]>({
+      url: "author/:id",
+      apiMethod: HttpVerbs.delete,
+      pathParams: {
+        id: auth.id.toString()
+      }
+    }).subscribe(
+      (response) => {
+        this.getAuthors();
+      }
+    );
+  }
+
+  postAuth(author: AuthorResource) {
+    this.communicationManagerService.callMockService<AuthorResource[]>({
+      url: "author",
+      apiMethod: HttpVerbs.post,
+      body: author
+    }).subscribe(
+      (response) => {
+        this.getAuthors();
+      }
+    );
+  }
+
+  EXAMPLEdeleteAuth(auth: AuthorResource) {
+    this.communicationManagerService.callMockService<AuthorResource[]>({
+      url: "author/:id",
+      apiMethod: HttpVerbs.delete,
+      body: auth,
+      httpOptions: {},
+      queryStringParams: {
+        id: auth.id.toString()
+      },
+      pathParams: {
+        id: auth.id.toString()
+      }
+    }).subscribe(
+      (response) => {
+        this.authors = response || [];
+      }
+    );
+  }
 
   fetchData() {
     let res: ResponseModel[];

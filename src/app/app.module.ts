@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, InjectionToken, ModuleWithProviders, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
 import { APP_BASE_HREF } from '@angular/common';
@@ -85,6 +85,7 @@ export const routerModuleForChild = RouterModule.forRoot([
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     routerModuleForChild,
     NgbModule.forRoot(),

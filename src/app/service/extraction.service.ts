@@ -1,14 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Exctraction } from "../om/extraction-model/Extraction";
+import { Exctraction } from "../om/extraction.model/Extraction";
 import * as XLSX from "xlsx";
 import { stringsNotNull } from "../util/stringsNotNull";
-import { CommunicationManagerService } from "./communicationManager.service";
-
-declare class AuthorResource {
-    id: number;
-    age: number;
-    name: string;
-}
+import { CommunicationManagerService, HttpVerbs } from "./communicationManager.service";
+import { AuthorResource } from "../om/json-server.model/Author";
 
 @Injectable({
     providedIn: "root"
@@ -33,13 +28,13 @@ export class ExtractionService {
                 if (!parsed) {
                     throw new Error("JSON.parse ERROR at className: " + ExtractionService.name);
                 }
-                this.communicationManagerService.callMockService<AuthorResource[]>({ url: "author" }).subscribe(
-                    (response) => {
-                        !!response && response.forEach(auth => {
-                            console.warn("Author: " + auth.name);
-                        });
-                    }
-                );
+                // this.communicationManagerService.callMockService<AuthorResource[]>({ url: "author", method: HttpVerbs.get }).subscribe(
+                //     (response) => {
+                //         !!response && response.forEach(auth => {
+                //             console.warn("Author: " + auth.name);
+                //         });
+                //     }
+                // );
             } catch (error) {
                 console.warn(error);
             }

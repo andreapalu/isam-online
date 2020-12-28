@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { EventEmitter } from "events";
 import { emit } from "process";
 import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
-import { Exctraction, ExtractionDetail } from "../../om/extraction-model/Extraction";
+import { Exctraction, ExtractionDetail } from "../../om/extraction.model/Extraction";
 import { ExtractionService } from "../../service/extraction.service";
 import { NavigationManagerService } from "../../service/navigationManager.service";
 import { stringsNotNull } from "../../util/stringsNotNull";
