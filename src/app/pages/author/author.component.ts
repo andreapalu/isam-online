@@ -23,7 +23,7 @@ export class AuthorComponent extends BasePageComponent {
   authors: AuthorResource[] = [];
   authors$: Observable<AuthorResource[]> = this.communicationManagerService.callMockService<AuthorResource[]>(
     {
-      url: "author",
+      apiEndpoint: "author-api/getAuthors",
       apiMethod: HttpVerbs.get
     }
   );

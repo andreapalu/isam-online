@@ -4,15 +4,21 @@ import { Inject, Injectable, InjectionToken } from "@angular/core";
 import { HttpOptions } from "../../assets/const/HttpOptions";
 import { BaseServerResource } from "../om/json-server.model/BaseServerResource";
 import { stringsNotNull } from "../util/stringsNotNull";
+import { ApiCatalogModel } from "../../assets/const/ApiCatalogModel";
 
 @Injectable()
 export class CommunicationManagerService {
     private baseUrl: string = "";
     private mockServerUrl: string = "/api/mock-server/";
 
+    apiCatalog: { [apiGroup: string]: ApiCatalogModel[] } = {};
+
     constructor(
         private httpClient: HttpClient
     ) {
+        this.loadStaticFile<{ [apiGroup: string]: ApiCatalogModel[] }>("../../assets/env/apicatalog/api.json").subscribe(
+            file => this.apiCatalog = file
+        )
     }
 
     /**
@@ -36,7 +42,7 @@ export class CommunicationManagerService {
 
 
     public callMockService<T>(request: CommunicationManagerRequest<T>): Observable<T> {
-        let finalUrl = this.mockServerUrl + request.url;
+        let finalUrl = this.getFinalUrl(this.mockServerUrl, request);
         if (!request.httpOptions) {
             request.httpOptions = {};
         }
@@ -76,6 +82,18 @@ export class CommunicationManagerService {
         }
     }
 
+    private getFinalUrl(applicationBaseurl: string, request: CommunicationManagerRequest<any>): string {
+        let apiDefinition: ApiCatalogModel = (this.apiCatalog[request.apiEndpoint.split("/")[0]] || [])
+            .find(api => (
+                api.name == request.apiEndpoint.split("/")[1]
+                && api.method == request.apiMethod
+            ));
+        if (!apiDefinition) {
+            throw new Error("api not found!");
+        }
+        return applicationBaseurl + apiDefinition.baseUrl + apiDefinition.endpoint;
+    }
+
     private addPathParams(requestUrl: string, pathParams?: ParamsObj): string {
         Object.keys(pathParams).forEach(paramKey => {
             if (!!requestUrl && requestUrl.indexOf(`/:${paramKey}`) != -1) {
@@ -86,7 +104,7 @@ export class CommunicationManagerService {
     }
 
     public callRealService<T>(request: CommunicationManagerRequest<T>): Observable<T> {
-        let finalUrl = this.mockServerUrl + request.url;
+        let finalUrl = this.getFinalUrl(this.mockServerUrl, request);
         return Observable.create(observer => {
             let httpCallObservable: Observable<T>;
             switch (request.apiMethod) {
@@ -220,7 +238,7 @@ export class CommunicationManagerService {
 }
 
 export type CommunicationManagerRequest<T> = {
-    url: string;
+    apiEndpoint: string;
     apiMethod: HttpVerbs;
     body?: any;
     httpOptions?: HttpOptions;

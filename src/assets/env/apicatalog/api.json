@@ -2,8 +2,27 @@
     "author-api": [
         {
             "name": "getAuthors",
-            "baseUrl": "",
-            "endpoint": ""
+            "baseUrl": "author",
+            "endpoint": "",
+            "method": "get"
+        },
+        {
+            "name": "deleteAuthor",
+            "baseUrl": "author",
+            "endpoint": "/:id",
+            "method": "delete"
+        },
+        {
+            "name": "postAuthor",
+            "baseUrl": "author",
+            "endpoint": "",
+            "method": "post"
+        },
+        {
+            "name": "updateAuthor",
+            "baseUrl": "author",
+            "endpoint": "/:id",
+            "method": "put"
         }
     ]
 }

@@ -13,7 +13,7 @@ export class AuthorService {
     getAuthors(): Observable<AuthorResource[]> {
         return this.communicationManagerService.callMockService<AuthorResource[]>(
             {
-                url: "author",
+                apiEndpoint: "author-api/getAuthors",
                 apiMethod: HttpVerbs.get
             }
         )
@@ -21,7 +21,7 @@ export class AuthorService {
 
     deleteAuthor(author: AuthorResource) {
         return this.communicationManagerService.callMockService<AuthorResource[]>({
-            url: "author/:id",
+            apiEndpoint: "author-api/deleteAuthor",
             apiMethod: HttpVerbs.delete,
             pathParams: {
                 id: author.id.toString()
@@ -31,7 +31,7 @@ export class AuthorService {
 
     postAuthor(author: AuthorResource): Observable<AuthorResource> {
         return this.communicationManagerService.callMockService<AuthorResource>({
-            url: "author",
+            apiEndpoint: "author-api/postAuthor",
             apiMethod: HttpVerbs.post,
             body: author
         })
@@ -39,7 +39,7 @@ export class AuthorService {
 
     updateAuthor(author: AuthorResource): Observable<AuthorResource> {
         return this.communicationManagerService.callMockService<AuthorResource>({
-            url: "author/:id",
+            apiEndpoint: "author-api/updateAuthor",
             apiMethod: HttpVerbs.put,
             pathParams: {
                 id: author.id.toString()
