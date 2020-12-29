@@ -1,0 +1,9 @@
+{
+    "author-api": [
+        {
+            "name": "getAuthors",
+            "baseUrl": "",
+            "endpoint": ""
+        }
+    ]
+}

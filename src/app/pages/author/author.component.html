@@ -1,0 +1,103 @@
+<div class="container-fluid">
+	<button (click)="showForm()">
+		{{showInsertForm ? 'Chiudi' : 'Inserisci autore'}}
+	</button>
+	<form *ngIf="showInsertForm" [formGroup]="insertAuthorForm" novalidate (ngSubmit)="onSubmit(insertAuthorForm)"
+		class="form form-register">
+		<div class="row mb-3">
+			<div class="col-2">
+				<label for="idInput" class="form-label">ID</label>
+				<input type="number" class="form-control" id="idInput" min="1" formControlName="id" [attr.disabled]="isAuthorUpdate ? true : null">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'id', label: 'ID' }">
+				</ng-container>
+			</div>
+			<div class="col-3">
+				<label for="name" class="form-label">Nome</label>
+				<input type="text" class="form-control" id="name" formControlName="name">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'name', label: 'Nome' }">
+				</ng-container>
+			</div>
+			<div class="col-1">
+				<label for="age" class="form-label">Età</label>
+				<input type="number" class="form-control" id="age" formControlName="age">
+				<ng-container *ngTemplateOutlet="inputError; context: { name: 'age', label: 'Età' }">
+				</ng-container>
+			</div>
+			<!-- <div class="col-1">
+				<label for="pristine" class="form-label">pristine</label>
+				<input style="width: inherit;" disabled id="pristine" [value]="insertAuthorForm.pristine">
+			</div>
+			<div class="col-1">
+				<label for="invalid" class="form-label">invalid</label>
+				<input style="width: inherit;" disabled id="invalid" [value]="insertAuthorForm.invalid">
+			</div> -->
+			<ng-template #inputError let-name="name" let-label="label">
+				<div *ngIf="insertAuthorForm.controls[name].invalid && (insertAuthorForm.controls[name].dirty || insertAuthorForm.controls[name].touched)"
+					class="alert alert-danger">
+					<div *ngIf="insertAuthorForm.controls[name].errors.required">
+						{{label || 'Il campo'}} è required.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.shouldNotHaveSpaces">
+						{{label || 'Il campo'}} contiene spazi.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.idAlreadyUsed">
+						Questo {{label || 'Il campo'}} è già utilizzato.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.invalidId">
+						Questo {{label || 'Il campo'}} non è valido.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.max">
+						{{label || 'Il campo'}} deve essere minore di
+						{{insertAuthorForm.controls[name].errors.max.max}}.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.min">
+						{{label || 'Il campo'}} deve essere maggiore di
+						{{insertAuthorForm.controls[name].errors.min.min}}.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.maxlength">
+						{{label || 'Il campo'}} non può essere lungo più di
+						{{insertAuthorForm.controls[name].errors.maxlength.requiredLength}} caratteri.
+					</div>
+					<div *ngIf="insertAuthorForm.controls[name].errors.minlength">
+						{{label || 'Il campo'}} deve avere almeno
+						{{insertAuthorForm.controls[name].errors.minlength.requiredLength}} caratteri.
+					</div>
+				</div>
+			</ng-template>
+
+		</div>
+		<button type="submit" class="btn btn-primary"
+			[disabled]="insertAuthorForm.pristine || insertAuthorForm.invalid">
+			{{isAuthorUpdate ? 'Modifica' : 'Inserisci'}}
+		</button>
+	</form>
+	<br><br>
+
+	<table id="autorTable">
+		<tr>
+			<th style="width: 200px;">name</th>
+			<th style="width: 100px;">age</th>
+			<th style="width: 100px;">id</th>
+			<th style="width: 200px;"> azioni</th>
+		</tr>
+		<!-- <tr *ngFor="let author of authors$ | async"> -->
+		<tr *ngFor="let author of authors">
+			<td>{{author.name}}</td>
+			<td>{{author.age}}</td>
+			<td>{{author.id}}</td>
+			<td>
+				<div class="row">
+					<span class="col icon-container" (click)="deleteAuthor(author)">
+						<img src="../../../assets/icon/trash.svg" class="margin-auto">
+						Elimina
+					</span>
+					<span class="col icon-container" (click)="showForm(null, author)">
+						<img src="../../../assets/icon/pencil.svg" class="margin-auto">
+						Modifica
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+</div>

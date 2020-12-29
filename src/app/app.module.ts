@@ -36,6 +36,9 @@ export { ExtractionComponent } from "./pages/extraction/extraction.component";
 import { InfograficaComponent } from "./pages/infografica/infografica.component";
 export { InfograficaComponent } from "./pages/infografica/infografica.component";
 
+import { AuthorComponent } from "./pages/author/author.component";
+export { AuthorComponent } from "./pages/author/author.component";
+
 // ---------- COMPONENTS ---------- //
 import { HeaderComponent } from "./component/header/header.component";
 export { HeaderComponent } from "./component/header/header.component";
@@ -62,6 +65,9 @@ export { NavigationManagerService } from "./service/navigationManager.service";
 import { CommunicationManagerService } from "./service/communicationManager.service";
 export { CommunicationManagerService } from "./service/communicationManager.service";
 
+import { AuthorService } from "./service/author/author.service";
+export { AuthorService } from "./service/author/author.service";
+
 export function initExtService(extractionService: ExtractionService): Function {
   return function () {
     return extractionService.init();
@@ -78,6 +84,7 @@ export const routerModuleForChild = RouterModule.forRoot([
   { path: 'test-service', component: TestServiceComponent },
   { path: 'extraction', component: ExtractionComponent },
   { path: 'infografica', component: InfograficaComponent },
+  { path: 'author', component: AuthorComponent },
   { path: '**', component: HomeComponent }
 ]);
 
@@ -102,7 +109,8 @@ export const routerModuleForChild = RouterModule.forRoot([
     LineChartComponent,
     LineSerieComponent,
     AreaComponent,
-    CircleSeriesComponent
+    CircleSeriesComponent,
+    AuthorComponent
   ],
   entryComponents: [
   ],
@@ -123,6 +131,7 @@ export const routerModuleForChild = RouterModule.forRoot([
     },
     NavigationManagerService,
     CommunicationManagerService,
+    AuthorService
     // { provide: APPLICATION_BASE_URL, useValue: 'Hello world' }
   ]
 })
