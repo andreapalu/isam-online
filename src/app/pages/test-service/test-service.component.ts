@@ -42,30 +42,54 @@ export class TestServiceComponent extends BasePageComponent {
   }
 
   insertAuthorForm: FormGroup;
-  createForm() {
-    this.insertAuthorForm = this.fb.group({
-      id: ['', [Validators.required, this.notValidId]],
-      name: ['', [Validators.required, this.stringWoSpaces, Validators.minLength(3)]],
-      age: ['', Validators.required]
-    });
+  isAuthorUpdate: boolean = false;
+  createForm(authorToUpdate?: AuthorResource) {
+    if (!!authorToUpdate) {
+      this.insertAuthorForm = this.fb.group({
+        id: ['', [Validators.required]],
+        name: ['', [Validators.required, this.stringWoSpaces, Validators.minLength(3)]],
+        age: ['', Validators.required]
+      });
+      this.isAuthorUpdate = true;
+      this.insertAuthorForm.patchValue({ 'id': authorToUpdate.id });
+      this.insertAuthorForm.patchValue({ 'name': authorToUpdate.name });
+      this.insertAuthorForm.patchValue({ 'age': authorToUpdate.age });
+    } else {
+      this.insertAuthorForm = this.fb.group({
+        id: ['', [Validators.required, this.notValidId]],
+        name: ['', [Validators.required, this.stringWoSpaces, Validators.minLength(3)]],
+        age: ['', Validators.required]
+      });
+      this.isAuthorUpdate = false;
+    }
   }
   onInit() {
     this.getAuthors();
   }
 
-  showForm(form?: NgForm) {
+  showForm(form?: NgForm, authorToUpdate?: AuthorResource) {
     !!form && form.reset();
     this.showInsertForm = !this.showInsertForm;
-    this.createForm();
+    if (this.showInsertForm) {
+      this.createForm(authorToUpdate);
+    }
   }
 
   onSubmit(form: NgForm) {
     try {
       let aut: AuthorResource = form.value;
-      aut.insertDate = new Date();
-      aut.lastUpdate = new Date();
-      aut.lastUpdateUser = "FE_CLIENT";
-      this.postAuth(aut);
+      let oldAut = this.authors.find(author => author.id == aut.id);
+      if (!!oldAut) {
+        aut.insertDate = new Date(oldAut.insertDate);
+        aut.lastUpdate = new Date();
+        aut.lastUpdateUser = "FE_CLIENT";
+        this.updateAuthor(aut);
+      } else {
+        aut.insertDate = new Date();
+        aut.lastUpdate = new Date();
+        aut.lastUpdateUser = "FE_CLIENT";
+        this.postAuthor(aut);
+      }
       this.showForm(form);
     } catch (error) {
       console.error(error);
@@ -129,12 +153,12 @@ export class TestServiceComponent extends BasePageComponent {
     })
   }
 
-  deleteAuth(auth: AuthorResource) {
+  deleteAuthor(author: AuthorResource) {
     this.communicationManagerService.callMockService<AuthorResource[]>({
       url: "author/:id",
       apiMethod: HttpVerbs.delete,
       pathParams: {
-        id: auth.id.toString()
+        id: author.id.toString()
       }
     }).subscribe(
       (response) => {
@@ -143,10 +167,25 @@ export class TestServiceComponent extends BasePageComponent {
     );
   }
 
-  postAuth(author: AuthorResource) {
+  postAuthor(author: AuthorResource) {
     this.communicationManagerService.callMockService<AuthorResource[]>({
       url: "author",
       apiMethod: HttpVerbs.post,
+      body: author
+    }).subscribe(
+      (response) => {
+        this.getAuthors();
+      }
+    );
+  }
+
+  updateAuthor(author: AuthorResource) {
+    this.communicationManagerService.callMockService<AuthorResource[]>({
+      url: "author/:id",
+      apiMethod: HttpVerbs.put,
+      pathParams: {
+        id: author.id.toString()
+      },
       body: author
     }).subscribe(
       (response) => {

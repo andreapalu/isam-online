@@ -3,44 +3,15 @@
 	getAuthors
 </button>
 <br><br> -->
-	<div *ngIf="false" style="text-align:center">
-		<form [formGroup]="angForm" novalidate>
-			<div class="form-group">
-				<label class="center-block">Name:
-					<input class="form-control" formControlName="name">
-				</label>
-				<ng-container *ngTemplateOutlet="newError; context: { model: id, label: 'name' }">
-				</ng-container>
-			</div>
-			<div class="form-group">
-				<label class="center-block">Surname:
-					<input class="form-control" formControlName="surname">
-				</label>
-				<ng-container *ngTemplateOutlet="newError; context: { model: id, label: 'surname' }">
-				</ng-container>
-			</div>
-			<ng-template #newError let-label="label">
-				<div *ngIf="angForm.controls[label].invalid && (angForm.controls[label].dirty || angForm.controls[label].touched)"
-					class="alert alert-danger">
-					<div *ngIf="angForm.controls[label].errors.required">
-						{{label || 'This field'}} is required.
-					</div>
-					<div *ngIf="angForm.controls[label].errors.shouldNotHaveSpaces">
-						{{label || 'This field'}} should not have spaces.
-					</div>
-				</div>
-			</ng-template>
-		</form>
-		<p>Form value: {{ angForm.value | json }}</p>
-		<p>Form status: {{ angForm.status | json }}</p>
-	</div>
-	<button (click)="showForm()">Inserisci autore</button>
+	<button (click)="showForm()">
+		{{showInsertForm ? 'Chiudi' : 'Inserisci autore'}}
+	</button>
 	<form *ngIf="showInsertForm" [formGroup]="insertAuthorForm" novalidate (ngSubmit)="onSubmit(insertAuthorForm)"
 		class="form form-register">
 		<div class="row mb-3">
 			<div class="col-2">
 				<label for="idInput" class="form-label">ID</label>
-				<input type="number" class="form-control" id="idInput" min="1" formControlName="id">
+				<input type="number" class="form-control" id="idInput" min="1" formControlName="id" [attr.disabled]="isAuthorUpdate ? true : null">
 				<ng-container *ngTemplateOutlet="inputError; context: { name: 'id', label: 'ID' }">
 				</ng-container>
 			</div>
@@ -101,7 +72,7 @@
 		</div>
 		<button type="submit" class="btn btn-primary"
 			[disabled]="insertAuthorForm.pristine || insertAuthorForm.invalid">
-			Inserisci
+			{{isAuthorUpdate ? 'Modifica' : 'Inserisci'}}
 		</button>
 	</form>
 	<br><br>
@@ -113,15 +84,22 @@
 			<th style="width: 100px;">id</th>
 			<th style="width: 200px;"> azioni</th>
 		</tr>
-		<!-- <tr *ngFor="let auth of authors$ | async"> -->
-		<tr *ngFor="let auth of authors">
-			<td>{{auth.name}}</td>
-			<td>{{auth.age}}</td>
-			<td>{{auth.id}}</td>
+		<!-- <tr *ngFor="let author of authors$ | async"> -->
+		<tr *ngFor="let author of authors">
+			<td>{{author.name}}</td>
+			<td>{{author.age}}</td>
+			<td>{{author.id}}</td>
 			<td>
-				<img src="../../../assets/icon/trash.svg"
-					style="cursor:pointer; filter:invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%);"
-					(click)="deleteAuth(auth)">
+				<div class="row">
+					<span class="col icon-container" (click)="deleteAuthor(author)">
+						<img src="../../../assets/icon/trash.svg" class="margin-auto">
+						Elimina
+					</span>
+					<span class="col icon-container" (click)="showForm(null, author)">
+						<img src="../../../assets/icon/pencil.svg" class="margin-auto">
+						Modifica
+					</span>
+				</div>
 			</td>
 		</tr>
 	</table>
