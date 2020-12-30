@@ -2,6 +2,8 @@ import { Component, Injector, VERSION } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { StockService } from "../../service/stock.service";
 import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
+import { Observable } from "rxjs";
+import { HttpVerbs } from "../../service/communicationManager.service";
 @Component({
   selector: "test-service",
   templateUrl: "./test-service.component.html",
@@ -30,6 +32,21 @@ export class TestServiceComponent extends BasePageComponent {
     private stockService: StockService
   ) {
     super(injector);
+    this.getChart().subscribe(response => {
+      console.log(JSON.stringify(response));
+    })
+  }
+
+  getChart(): Observable<any> {
+    return this.communicationManagerService.callMockService<any>(
+      {
+        apiEndpoint: "yahoo-api/getChart",
+        apiMethod: HttpVerbs.get,
+        pathParams: {
+          id: "TSLA"
+        }
+      }
+    )
   }
 
   fetchData() {

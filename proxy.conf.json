@@ -2,16 +2,24 @@
   "/stock": {
     "target": "https://query1.finance.yahoo.com",
     "pathRewrite": {
-    "^/stock": ""
-  },
+      "^/stock": ""
+    },
     "changeOrigin": true
   },
-    "/api/mock-server/*": {
-        "target": "http://localhost:3000",
-        "pathRewrite": {
-            "^/api/mock-server/": ""
-        },
-        "logLevel": "debug",
-        "changeOrigin": true
-    }
+  "/api/mock-server/*": {
+    "target": "http://localhost:3000",
+    "pathRewrite": {
+      "^/api/mock-server/": ""
+    },
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/api/yahoo-stock/*": {
+    "target": "https://query1.finance.yahoo.com",
+    "pathRewrite": {
+      "^/api/yahoo-stock/": ""
+    },
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
 }

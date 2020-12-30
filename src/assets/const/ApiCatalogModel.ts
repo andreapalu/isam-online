@@ -5,4 +5,5 @@ export class ApiCatalogModel {
     baseUrl: string;
     endpoint: string;
     method: HttpVerbs;
+    host?: string;
 }

@@ -9,7 +9,6 @@ import { ApiCatalogModel } from "../../assets/const/ApiCatalogModel";
 @Injectable()
 export class CommunicationManagerService {
     private baseUrl: string = "";
-    private mockServerUrl: string = "/api/mock-server/";
 
     apiCatalog: { [apiGroup: string]: ApiCatalogModel[] } = {};
 
@@ -42,7 +41,47 @@ export class CommunicationManagerService {
 
 
     public callMockService<T>(request: CommunicationManagerRequest<T>): Observable<T> {
-        let finalUrl = this.getFinalUrl(this.mockServerUrl, request);
+        const params = this.manageParameters(this.baseUrl, request);
+        switch (params.request.apiMethod) {
+            case HttpVerbs.get:
+                return this.httpClient.get<T>(params.finalUrl, params.request.httpOptions);
+            case HttpVerbs.delete:
+                return this.httpClient.delete<T>(params.finalUrl, params.request.httpOptions);
+            case HttpVerbs.patch:
+                return this.httpClient.patch<T>(params.finalUrl, params.request.httpOptions);
+            case HttpVerbs.post:
+                if (!!params.request.body) {
+                    if (BaseServerResource.prototype.parseBaseServerResource(params.request.body)) {
+                        params.request.httpOptions = params.request.body;
+                    } else {
+                        throw new Error("INVALID RESOURCE FOR METHOD " + params.request.apiMethod);
+                    }
+                }
+                return this.httpClient.post<T>(params.finalUrl, params.request.httpOptions);
+            case HttpVerbs.put:
+                if (!!params.request.body) {
+                    if (BaseServerResource.prototype.parseBaseServerResource(params.request.body)) {
+                        params.request.httpOptions = params.request.body;
+                    } else {
+                        throw new Error("INVALID RESOURCE FOR METHOD " + params.request.apiMethod);
+                    }
+                }
+                return this.httpClient.put<T>(params.finalUrl, params.request.httpOptions);
+            default:
+                return null;
+        }
+    }
+
+    private manageParameters(applicationBaseurl: string, request: CommunicationManagerRequest<any>): { finalUrl: string, request: CommunicationManagerRequest<any> } {
+        let apiDefinition: ApiCatalogModel = (this.apiCatalog[request.apiEndpoint.split("/")[0]] || [])
+            .find(api => (
+                api.name == request.apiEndpoint.split("/")[1]
+                && api.method == request.apiMethod
+            ));
+        if (!apiDefinition) {
+            throw new Error("api definition not found in apicatalog!");
+        }
+        let finalUrl: string = applicationBaseurl + (apiDefinition.host || "") + apiDefinition.baseUrl + apiDefinition.endpoint;
         if (!request.httpOptions) {
             request.httpOptions = {};
         }
@@ -52,46 +91,8 @@ export class CommunicationManagerService {
         if (request.pathParams) {
             finalUrl = this.addPathParams(finalUrl, request.pathParams);
         }
-        switch (request.apiMethod) {
-            case HttpVerbs.get:
-                return this.httpClient.get<T>(finalUrl, request.httpOptions);
-            case HttpVerbs.delete:
-                return this.httpClient.delete<T>(finalUrl, request.httpOptions);
-            case HttpVerbs.patch:
-                return this.httpClient.patch<T>(finalUrl, request.httpOptions);
-            case HttpVerbs.post:
-                if (!!request.body) {
-                    if (BaseServerResource.prototype.parseBaseServerResource(request.body)) {
-                        request.httpOptions = request.body;
-                    } else {
-                        throw new Error("INVALID RESOURCE FOR METHOD " + request.apiMethod);
-                    }
-                }
-                return this.httpClient.post<T>(finalUrl, request.httpOptions);
-            case HttpVerbs.put:
-                if (!!request.body) {
-                    if (BaseServerResource.prototype.parseBaseServerResource(request.body)) {
-                        request.httpOptions = request.body;
-                    } else {
-                        throw new Error("INVALID RESOURCE FOR METHOD " + request.apiMethod);
-                    }
-                }
-                return this.httpClient.put<T>(finalUrl, request.httpOptions);
-            default:
-                return null;
-        }
-    }
 
-    private getFinalUrl(applicationBaseurl: string, request: CommunicationManagerRequest<any>): string {
-        let apiDefinition: ApiCatalogModel = (this.apiCatalog[request.apiEndpoint.split("/")[0]] || [])
-            .find(api => (
-                api.name == request.apiEndpoint.split("/")[1]
-                && api.method == request.apiMethod
-            ));
-        if (!apiDefinition) {
-            throw new Error("api not found!");
-        }
-        return applicationBaseurl + apiDefinition.baseUrl + apiDefinition.endpoint;
+        return { finalUrl, request };
     }
 
     private addPathParams(requestUrl: string, pathParams?: ParamsObj): string {
@@ -104,42 +105,42 @@ export class CommunicationManagerService {
     }
 
     public callRealService<T>(request: CommunicationManagerRequest<T>): Observable<T> {
-        let finalUrl = this.getFinalUrl(this.mockServerUrl, request);
+        const params = this.manageParameters(this.baseUrl, request);
         return Observable.create(observer => {
             let httpCallObservable: Observable<T>;
-            switch (request.apiMethod) {
+            switch (params.request.apiMethod) {
                 case HttpVerbs.get:
-                    httpCallObservable = this.callHttpGet<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpGet<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 case HttpVerbs.delete:
-                    httpCallObservable = this.callHttpDelete<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpDelete<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 case HttpVerbs.post:
-                    httpCallObservable = this.callHttpPost<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpPost<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 case HttpVerbs.put:
-                    httpCallObservable = this.callHttpPut<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpPut<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 case HttpVerbs.patch:
-                    httpCallObservable = this.callHttpPatch<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpPatch<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 case HttpVerbs.head:
-                    httpCallObservable = this.callHttpHead<T>(finalUrl, request);
+                    httpCallObservable = this.callHttpHead<T>(params.finalUrl, params.request);
                     observer.next(httpCallObservable);
                     observer.complete();
                     break;
                 default:
-                    throw new Error('Communication manager do not implement ' + request.apiMethod);
+                    throw new Error('Communication manager do not implement ' + params.request.apiMethod);
             }
         })
     }

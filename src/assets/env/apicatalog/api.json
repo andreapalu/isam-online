@@ -4,25 +4,38 @@
             "name": "getAuthors",
             "baseUrl": "author",
             "endpoint": "",
-            "method": "get"
+            "method": "get",
+            "host": "/api/mock-server/"
         },
         {
             "name": "deleteAuthor",
             "baseUrl": "author",
             "endpoint": "/:id",
-            "method": "delete"
+            "method": "delete",
+            "host": "/api/mock-server/"
         },
         {
             "name": "postAuthor",
             "baseUrl": "author",
             "endpoint": "",
-            "method": "post"
+            "method": "post",
+            "host": "/api/mock-server/"
         },
         {
             "name": "updateAuthor",
             "baseUrl": "author",
             "endpoint": "/:id",
-            "method": "put"
+            "method": "put",
+            "host": "/api/mock-server/"
+        }
+    ],
+    "yahoo-api": [
+        {
+            "name": "getChart",
+            "baseUrl": "/v8/finance/",
+            "endpoint": "chart/:id",
+            "method": "get",
+            "host": "/api/yahoo-stock/"
         }
     ]
 }
