@@ -9,7 +9,7 @@
   "/api/mock-server/*": {
     "target": "http://localhost:3000",
     "pathRewrite": {
-      "^/api/mock-server/": ""
+      "^/api/mock-server": ""
     },
     "logLevel": "debug",
     "changeOrigin": true
@@ -17,7 +17,7 @@
   "/api/yahoo-stock/*": {
     "target": "https://query1.finance.yahoo.com",
     "pathRewrite": {
-      "^/api/yahoo-stock/": ""
+      "^/api/yahoo-stock": ""
     },
     "logLevel": "debug",
     "changeOrigin": true
@@ -25,7 +25,7 @@
   "/api/nasdaq-stock/*": {
     "target": "https://api.nasdaq.com",
     "pathRewrite": {
-      "^/api/nasdaq-stock/": "/api"
+      "^/api/nasdaq-stock": "/api"
     },
     "logLevel": "debug",
     "changeOrigin": true
@@ -33,7 +33,7 @@
   "/api/rai/*": {
     "target": "https://www.raiplayradio.it",
     "pathRewrite": {
-      "^/api/rai/": ""
+      "^/api/rai": ""
     },
     "logLevel": "debug",
     "changeOrigin": true

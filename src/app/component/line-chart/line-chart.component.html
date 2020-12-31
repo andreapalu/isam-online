@@ -7,6 +7,9 @@
     [style.width.px]="view[0]">
     <div class="col-3">
         <p style="text-align: center; font-size: 12px; font-weight: bold;">Legenda</p>
+        <p style="text-align: center; font-size: 12px;">Totale elementi: <strong>{{totElements}}</strong></p>
+        <p style="text-align: center; font-size: 12px;">Divisi in <strong>{{data.length}}</strong> serie
+            (<strong>{{totElements / data.length}}</strong> elementi per serie)</p>
     </div>
     <div class="col-9">
         <div class="row">
@@ -27,11 +30,11 @@
         <ngx-charts-chart [view]="view" [activeEntries]="activeEntries">
             <svg:g [attr.transform]="transform" class="line-chart chart">
                 <svg:g ngx-charts-x-axis *ngIf="xAxis" [xScale]="xScale" [dims]="dims" [showGridLines]="false"
-                    [showLabel]="showXAxisLabel" [labelText]="'xAxisLabel'" [tickFormatting]="xAxisTickFormatting"
+                    [showLabel]="showXAxisLabel" [labelText]="xAxisLabel" [tickFormatting]="xAxisTickFormatting"
                     [ticks]="xAxisTicks" (dimensionsChanged)="updateXAxisHeight($event)">
                 </svg:g>
                 <svg:g ngx-charts-y-axis *ngIf="yAxis" [yScale]="yScale" [dims]="dims" [showGridLines]="showGridLines"
-                    [showLabel]="showYAxisLabel" [labelText]="'yAxisLabel'" [tickFormatting]="yAxisTickFormatting"
+                    [showLabel]="showYAxisLabel" [labelText]="yAxisLabel" [tickFormatting]="yAxisTickFormatting"
                     [ticks]="yAxisTicks" [referenceLines]="referenceLines" [showRefLines]="showRefLines"
                     [showRefLabels]="showRefLabels" (dimensionsChanged)="updateYAxisWidth($event)">
                 </svg:g>
@@ -45,9 +48,8 @@
                         <svg:g *ngFor="let series of data; index as i">
                             <svg:g *ngFor="let x of series.series; index as i">
                                 <svg:g isam-circle-series #circle [xScale]="xScale" [yScale]="yScale" [colors]="colors"
-                                    [data]="series" [visibleValue]="x.name | date: 'mediumDate'"
-                                    [activeEntries]="activeEntries" [morezIndex]="morezIndex"
-                                    [tooltipDisabled]="tooltipDisabled"
+                                    [data]="series" [visibleValue]="x.name" [activeEntries]="activeEntries"
+                                    [morezIndex]="morezIndex" [tooltipDisabled]="tooltipDisabled"
                                     [tooltipTemplate]="tooltipTemplate? tooltipTemplate : defaultTooltipTemplate"
                                     (select)="onClick($event, series)" (activate)="onActivate($event,x)"
                                     (deactivate)="onDeactivate($event)" />

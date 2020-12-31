@@ -5,28 +5,28 @@
             "baseUrl": "author",
             "endpoint": "",
             "method": "get",
-            "host": "/api/mock-server/"
+            "host": "/api/mock-server"
         },
         {
             "name": "deleteAuthor",
             "baseUrl": "author",
             "endpoint": "/:id",
             "method": "delete",
-            "host": "/api/mock-server/"
+            "host": "/api/mock-server"
         },
         {
             "name": "postAuthor",
             "baseUrl": "author",
             "endpoint": "",
             "method": "post",
-            "host": "/api/mock-server/"
+            "host": "/api/mock-server"
         },
         {
             "name": "updateAuthor",
             "baseUrl": "author",
             "endpoint": "/:id",
             "method": "put",
-            "host": "/api/mock-server/"
+            "host": "/api/mock-server"
         }
     ],
     "stock-api": [
@@ -35,14 +35,14 @@
             "baseUrl": "/v8/finance",
             "endpoint": "/chart/:id",
             "method": "get",
-            "host": "/api/yahoo-stock/"
+            "host": "/api/yahoo-stock"
         },
         {
             "name": "getStocks",
             "baseUrl": "/screener",
             "endpoint": "/stocks",
             "method": "get",
-            "host": "/api/nasdaq-stock/"
+            "host": "/api/nasdaq-stock"
         }
     ],
     "rai-api": [
@@ -51,21 +51,21 @@
             "baseUrl": "/programmi/wikimusic",
             "endpoint": "/archivio/puntate",
             "method": "get",
-            "host": "/api/rai/"
+            "host": "/api/rai"
         },
         {
             "name": "getYearPages",
             "baseUrl": "/programmi/wikimusic",
             "endpoint": "/archivio/puntate/:year",
             "method": "get",
-            "host": "/api/rai/"
+            "host": "/api/rai"
         },
         {
             "name": "getPage",
             "baseUrl": "/programmi/wikimusic",
             "endpoint": "/archivio/puntate/:year/:pag",
             "method": "get",
-            "host": "/api/rai/"
+            "host": "/api/rai"
         }
     ]
 }

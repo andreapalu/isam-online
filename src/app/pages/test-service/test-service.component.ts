@@ -67,11 +67,17 @@ export class TestServiceComponent extends BasePageComponent {
 
       let highSerie: GraphData = { series: [] };
       let minSerie: GraphData = { series: [] };
+      let closureSerie: GraphData = { series: [] };
+      let openSerie: GraphData = { series: [] };
       let startDate: Date;
       let endDate: Date;
-      highSerie.color = "#5965BA";
+      closureSerie.color = "#5965BA";
+      closureSerie.name = "Chiusura";
+      openSerie.color = "#FABE0A";
+      openSerie.name = "Apertura";
+      highSerie.color = "#17d200";
       highSerie.name = "Massimi";
-      minSerie.color = "#FABE0A";
+      minSerie.color = "#ff0000";
       minSerie.name = "Minimi";
       serviceData.chart.result.forEach(result => {
         result.timestamp.forEach((tms, index) => {
@@ -85,7 +91,10 @@ export class TestServiceComponent extends BasePageComponent {
           let name: Date = parseDateNotNull(tms);
           let highValue: number = parseFloatNotNull(result.indicators.quote[0].high[index]);
           let minValue: number = parseFloatNotNull(result.indicators.quote[0].low[index]);
-          if (index > 10) {
+          let openValue: number = parseFloatNotNull(result.indicators.quote[0].open[index]);
+          let closeValue: number = parseFloatNotNull(result.indicators.quote[0].close[index]);
+          let volumeValue: number = parseFloatNotNull(result.indicators.quote[0].volume[index]);
+          if (!!volumeValue && volumeValue != 0 && volumeValue != null) {
             highSerie.series.push({
               name: name,
               value: highValue
@@ -94,17 +103,32 @@ export class TestServiceComponent extends BasePageComponent {
               name: name,
               value: minValue
             })
+            closureSerie.series.push({
+              name: name,
+              value: closeValue
+            })
+            openSerie.series.push({
+              name: name,
+              value: openValue
+            })
           }
         })
 
       });
-      let values: number[] = [...highSerie.series.map(x => x.value), ...minSerie.series.map(x => x.value)];
+      let values: number[] = [
+        ...highSerie.series.map(x => x.value),
+        ...minSerie.series.map(x => x.value),
+        ...closureSerie.series.map(x => x.value),
+        ...openSerie.series.map(x => x.value)
+      ];
       // this.yScaleMin = Math.min(...values) - Math.abs(Math.min(...values) * 0.1);
       // this.yScaleMax = Math.max(...values) + Math.abs(Math.max(...values) * 0.1);
       this.yScaleMin = Math.min(...values);
       this.yScaleMax = Math.max(...values);
-      this.graphSource.push(highSerie, minSerie);
+      this.graphSource.push(closureSerie, openSerie, highSerie, minSerie);
       this.graphLegend = [
+        "Chiusura" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
+        "Apertura" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
         "Massimi" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
         "Minimi" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
       ]

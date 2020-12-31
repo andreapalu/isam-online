@@ -103,6 +103,8 @@ export class LineChartComponent implements OnChanges, OnInit {
   xScale: any;
   colors: any;
 
+  totElements: number = 0;
+
   constructor(
     private _sanitizer: DomSanitizer
   ) { }
@@ -110,13 +112,14 @@ export class LineChartComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes && !!changes.data && !!changes.data.currentValue) {
       this.update();
-
+      this.totElements = 0;
+      this.data.forEach(x => this.totElements += x.series.length);
+      this.data[0].series.length
     }
   }
 
   hexToFilter(hex) {
     if (!!hex) {
-      console.log("hex: " + hex + " , filter: " + HexToFilter(hex).filter)
       return this._sanitizer.bypassSecurityTrustStyle(
         HexToFilter(hex).filter
       );
@@ -335,8 +338,8 @@ export class LineChartComponent implements OnChanges, OnInit {
       showYAxis: this.yAxis,
       xAxisHeight: this.xAxisHeight,
       yAxisWidth: this.yAxisWidth,
-      showXLabel: this.showXAxisLabel,
-      showYLabel: this.showYAxisLabel,
+      showXLabel: !!this.showXAxisLabel,
+      showYLabel: !!this.showYAxisLabel,
     });
 
     this.xDomain = this.getXDomain();
