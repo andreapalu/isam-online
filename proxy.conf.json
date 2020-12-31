@@ -29,5 +29,13 @@
     },
     "logLevel": "debug",
     "changeOrigin": true
+  },
+  "/api/rai/*": {
+    "target": "https://www.raiplayradio.it",
+    "pathRewrite": {
+      "^/api/rai/": ""
+    },
+    "logLevel": "debug",
+    "changeOrigin": true
   }
 }

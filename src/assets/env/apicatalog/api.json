@@ -44,5 +44,28 @@
             "method": "get",
             "host": "/api/nasdaq-stock/"
         }
+    ],
+    "rai-api": [
+        {
+            "name": "getYears",
+            "baseUrl": "/programmi/wikimusic",
+            "endpoint": "/archivio/puntate",
+            "method": "get",
+            "host": "/api/rai/"
+        },
+        {
+            "name": "getYearPages",
+            "baseUrl": "/programmi/wikimusic",
+            "endpoint": "/archivio/puntate/:year",
+            "method": "get",
+            "host": "/api/rai/"
+        },
+        {
+            "name": "getPage",
+            "baseUrl": "/programmi/wikimusic",
+            "endpoint": "/archivio/puntate/:year/:pag",
+            "method": "get",
+            "host": "/api/rai/"
+        }
     ]
 }

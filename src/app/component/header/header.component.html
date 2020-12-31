@@ -32,10 +32,16 @@
                         <li><a class="dropdown-item" href="#">Something else here</a></li> -->
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" routerLink="/author" routerLinkActive="active">
-                        Autori
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="varDropdown" role="button" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Varie
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="varDropdown">
+                        <li><a class="dropdown-item" routerLink="/author" >Autori</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item"  routerLink="/rai">Rai</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" routerLink="/test-service" routerLinkActive="active">

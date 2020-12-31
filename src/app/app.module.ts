@@ -39,6 +39,9 @@ export { InfograficaComponent } from "./pages/infografica/infografica.component"
 import { AuthorComponent } from "./pages/author/author.component";
 export { AuthorComponent } from "./pages/author/author.component";
 
+import { RaiComponent } from "./pages/rai/rai.component";
+export { RaiComponent } from "./pages/rai/rai.component";
+
 // ---------- COMPONENTS ---------- //
 import { HeaderComponent } from "./component/header/header.component";
 export { HeaderComponent } from "./component/header/header.component";
@@ -91,6 +94,7 @@ export const routerModuleForChild = RouterModule.forRoot([
   { path: 'extraction', component: ExtractionComponent },
   { path: 'infografica', component: InfograficaComponent },
   { path: 'author', component: AuthorComponent },
+  { path: 'rai', component: RaiComponent },
   { path: '**', component: HomeComponent }
 ]);
 
@@ -116,7 +120,8 @@ export const routerModuleForChild = RouterModule.forRoot([
     LineSerieComponent,
     AreaComponent,
     CircleSeriesComponent,
-    AuthorComponent
+    AuthorComponent,
+    RaiComponent
   ],
   entryComponents: [
   ],

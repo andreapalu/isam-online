@@ -93,6 +93,9 @@ export class CommunicationManagerService {
         if (!request.httpOptions) {
             request.httpOptions = {};
         }
+        if (!request.httpOptions.responseType) {
+            request.httpOptions.responseType = 'json';
+        }
         if (request.queryStringParams) {
             request.httpOptions['params'] = request.queryStringParams;
         }

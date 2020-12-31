@@ -9,6 +9,7 @@ export type HttpOptions = {
         [param: string]: string | string[];
     };
     reportProgress?: boolean;
-    responseType?: 'json';
+    // responseType?: 'json';
+    responseType?: any;
     withCredentials?: boolean;
 }

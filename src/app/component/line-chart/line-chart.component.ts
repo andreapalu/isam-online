@@ -116,9 +116,9 @@ export class LineChartComponent implements OnChanges, OnInit {
 
   hexToFilter(hex) {
     if (!!hex) {
-      console.log("hex: " + hex + " , filter: " + (HexToFilter(hex) || {}).filter)
+      console.log("hex: " + hex + " , filter: " + HexToFilter(hex).filter)
       return this._sanitizer.bypassSecurityTrustStyle(
-        (HexToFilter(hex) || {}).filter
+        HexToFilter(hex).filter
       );
     } else {
       return '';
