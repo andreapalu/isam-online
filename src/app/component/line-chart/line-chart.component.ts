@@ -9,10 +9,12 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { calculateViewDimensions, ColorHelper, ViewDimensions } from '@swimlane/ngx-charts';
 import { scaleLinear, scalePoint, scaleTime } from 'd3-scale';
 import { curveBasis, curveBasisClosed, curveCardinal, curveCatmullRom, curveLinear, curveLinearClosed, curveMonotoneX, curveMonotoneY, curveNatural, curveStep, curveStepAfter, curveStepBefore } from 'd3-shape'
+import { HexToFilter } from '../../util/hexToFilterFunction';
 import { GraphData } from './line-chart-model';
 
 @Component({
@@ -101,11 +103,27 @@ export class LineChartComponent implements OnChanges, OnInit {
   xScale: any;
   colors: any;
 
+  constructor(
+    private _sanitizer: DomSanitizer
+  ) { }
+
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes && !!changes.data && !!changes.data.currentValue) {
       this.update();
+
     }
   }
+
+  hexToFilter(hex) {
+    if (!!hex) {
+      console.log("hex: " + hex + " , filter: " + (HexToFilter(hex) || {}).filter)
+      return this._sanitizer.bypassSecurityTrustStyle(
+        (HexToFilter(hex) || {}).filter
+      );
+    } else {
+      return '';
+    }
+  };
 
   ngOnInit() {
     this.data.forEach(el => {

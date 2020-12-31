@@ -66,6 +66,7 @@ import { CommunicationManagerService } from "./service/communicationManager.serv
 export { CommunicationManagerService } from "./service/communicationManager.service";
 
 import { AuthorService } from "./service/author/author.service";
+import { StockService } from "./service/stock.service";
 export { AuthorService } from "./service/author/author.service";
 
 export function initExtService(extractionService: ExtractionService): Function {
@@ -76,6 +77,11 @@ export function initExtService(extractionService: ExtractionService): Function {
 export function initNavService(nav: NavigationManagerService): Function {
   return function () {
     return nav.init();
+  };
+}
+export function initCommMan(commMan: CommunicationManagerService): Function {
+  return function () {
+    return commMan.init();
   };
 }
 
@@ -122,6 +128,14 @@ export const routerModuleForChild = RouterModule.forRoot([
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
+    NavigationManagerService,
+    CommunicationManagerService,
+    {
+      'provide': APP_INITIALIZER,
+      'useFactory': initCommMan,
+      'deps': [CommunicationManagerService],
+      'multi': true
+    },
     ExtractionService,
     {
       'provide': APP_INITIALIZER,
@@ -129,9 +143,8 @@ export const routerModuleForChild = RouterModule.forRoot([
       'deps': [ExtractionService],
       'multi': true
     },
-    NavigationManagerService,
-    CommunicationManagerService,
-    AuthorService
+    AuthorService,
+    StockService
     // { provide: APPLICATION_BASE_URL, useValue: 'Hello world' }
   ]
 })

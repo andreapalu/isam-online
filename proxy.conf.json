@@ -21,5 +21,13 @@
     },
     "logLevel": "debug",
     "changeOrigin": true
+  },
+  "/api/nasdaq-stock/*": {
+    "target": "https://api.nasdaq.com",
+    "pathRewrite": {
+      "^/api/nasdaq-stock/": "/api"
+    },
+    "logLevel": "debug",
+    "changeOrigin": true
   }
 }

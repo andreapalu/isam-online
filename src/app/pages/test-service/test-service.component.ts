@@ -1,118 +1,162 @@
-import { Component, Injector, VERSION } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { Component, Injector } from "@angular/core";
 import { StockService } from "../../service/stock.service";
 import { BasePageComponent } from "../../component/BasePageComponent/base-page.component";
-import { Observable } from "rxjs";
-import { HttpVerbs } from "../../service/communicationManager.service";
+import { NasdaqStocksModel, NasdaqStocksRowModel } from "../../om/stock-service.model/getNasdaqStocks.model";
+import { GraphData } from "../../component/line-chart/line-chart-model";
+import { parseDateNotNull, parseFloatNotNull } from "../../util/parseFunction";
+import { YahooChartModel } from "../../om/stock-service.model/getChart.model";
+
 @Component({
   selector: "test-service",
   templateUrl: "./test-service.component.html",
   styleUrls: ["./test-service.component.scss"]
 })
 export class TestServiceComponent extends BasePageComponent {
-  name = "Angular " + VERSION.major;
 
-  public out: string;
-  public users: ResponseModel[];
-  public outPresent: boolean = false;
-  private url =
-    "https://query1.finance.yahoo.com/v8/finance/chart/TSLA";
-  private headers = new Headers({ "Content-Type": "application/json" });
+  rows: NasdaqStocksRowModel[] = [];
+  totalrecords: number = 0;
 
-  stocks = [
-    { symbol: "TSLA", name: "Tesla, Inc." },
-    { symbol: "MSFT", name: "Microsoft Corporation" },
-    { symbol: "SPCE", name: "Virgin Galactic" },
-    { symbol: "CVS", name: "CVS Pharmacy" }
-  ];
+  /** Line-chart */
+  graphSource: GraphData[] = [];
+  graphLegend: string[] = []
+  show: boolean = false;
+  graphTitle: string;
+  yScaleMin: number;
+  yScaleMax: number;
 
   constructor(
     injector: Injector,
-    private httpClient: HttpClient,
     private stockService: StockService
   ) {
     super(injector);
-    this.getChart().subscribe(response => {
-      console.log(JSON.stringify(response));
+  }
+
+  onInit() {
+    this.getNasdaqStocks();
+  }
+
+  getNasdaqStocks() {
+    this.stockService.getNasdaqStocks().subscribe(response => {
+      let nasdaqStocksModel: NasdaqStocksModel = response;
+      this.totalrecords = nasdaqStocksModel.data.rows.length;
+      this.rows = nasdaqStocksModel.data.rows;
+
     })
   }
 
-  getChart(): Observable<any> {
-    return this.communicationManagerService.callMockService<any>(
-      {
-        apiEndpoint: "yahoo-api/getChart",
-        apiMethod: HttpVerbs.get,
-        pathParams: {
-          id: "TSLA"
-        }
+  getChart(id: string) {
+    this.stockService.getChart(id).subscribe(response => {
+      this.generateGraph(response);
+    })
+  }
+
+  /** Genera il grafico */
+  generateGraph(serviceData: YahooChartModel) {
+    this.resetGraph();
+    if (!serviceData || !serviceData.chart || !serviceData.chart.result || serviceData.chart.result.length == 0) { // caso niente dati
+      let emptySerie: GraphData = {
+        color: "white",
+        name: "Nessun record",
+        series: []
+      };
+      for (let i = 0; i < 12; i++) {
+        emptySerie.series.push({ name: new Date(2021, i, 1), value: 100 })
       }
-    )
-  }
+      this.graphSource.push(emptySerie);
+    } else {
 
-  fetchData() {
-    let res: ResponseModel[];
-    this.httpClient
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .subscribe((response: ResponseModel[]) => {
-        this.users = res = response;
-        if (!!response && response.find(x => x.id == 1)) {
-          console.log("Trovast");
-        }
-        if (!!res) {
-          this.outPresent = true;
-        } else {
-          this.outPresent = false;
-        }
-        return this.out = JSON.stringify(res);
+      let highSerie: GraphData = { series: [] };
+      let minSerie: GraphData = { series: [] };
+      let startDate: Date;
+      let endDate: Date;
+      highSerie.color = "#5965BA";
+      highSerie.name = "Massimi";
+      minSerie.color = "#FABE0A";
+      minSerie.name = "Minimi";
+      serviceData.chart.result.forEach(result => {
+        result.timestamp.forEach((tms, index) => {
+          if (index == 0) {
+            startDate = parseDateNotNull(tms);
+          }
+          if (index == (result.timestamp.length - 1)) {
+            endDate = parseDateNotNull(tms);
+          }
+          // let name: string = parseDateNotNull(tms).toDateString();
+          let name: Date = parseDateNotNull(tms);
+          let highValue: number = parseFloatNotNull(result.indicators.quote[0].high[index]);
+          let minValue: number = parseFloatNotNull(result.indicators.quote[0].low[index]);
+          if (index > 10) {
+            highSerie.series.push({
+              name: name,
+              value: highValue
+            })
+            minSerie.series.push({
+              name: name,
+              value: minValue
+            })
+          }
+        })
+
       });
+      let values: number[] = [...highSerie.series.map(x => x.value), ...minSerie.series.map(x => x.value)];
+      // this.yScaleMin = Math.min(...values) - Math.abs(Math.min(...values) * 0.1);
+      // this.yScaleMax = Math.max(...values) + Math.abs(Math.max(...values) * 0.1);
+      this.yScaleMin = Math.min(...values);
+      this.yScaleMax = Math.max(...values);
+      this.graphSource.push(highSerie, minSerie);
+      this.graphLegend = [
+        "Massimi" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
+        "Minimi" + ": " + startDate.toDateString() + " - " + endDate.toDateString(),
+      ]
+    }
+    setTimeout(() => {
+      this.show = true;
+    }, 75);
   }
 
-  fetchStock() {
-    this.httpClient.get(this.url).subscribe(response => {
-      console.log("Yahoo dice: " + JSON.stringify(response));
-    });
+  resetGraph() {
+    this.graphSource = []
+    this.graphLegend = undefined;
+    this.show = false;
   }
 
-  public tryService() {
-    this.stockService
-      .getStockWfetch(this.stocks[0].symbol)
-      .subscribe(response => {
-        debugger;
-        console.log("questo: " + JSON.stringify(response));
-      });
+  selectedStock: NasdaqStocksRowModel;
+  selectStock(item: NasdaqStocksRowModel) {
+    this.selectedStock = item;
+    (<HTMLInputElement>document.getElementById('stockName')).value = item.name;
+    this.filteredList = [];
+    this.getChart(item.symbol)
   }
 
-  // FETCH COURSE -- FUNZIA
-  searchString: String = "";
-  imageSearch = [];
-  searchImages() {
-    const urlofApi =
-      "https://api.github.com/search/repositories?q=" + this.searchString;
-    this.httpClient.get(urlofApi).subscribe((res) => {
-      const searchResult: any = res;
-      console.log(searchResult);
-      this.imageSearch = searchResult.items;
-      //console.log(this.imageSearch.owner.avatar_url);
-    });
-  }
-  /*
-  */
-  fetchImages() {
-    const urlofApi =
-      "https://api.github.com/search/repositories?q=" + this.searchString;
-    this.stockService.fetch(urlofApi).subscribe((res) => {
-      const searchResult: any = res;
-      console.log(searchResult);
-      this.imageSearch = searchResult.items;
-      //console.log(this.imageSearch.owner.avatar_url);
-    });
+  filteredList: NasdaqStocksRowModel[];
+  lastkeydown1: number = 0;
+  overFlowSearch: boolean = false;
+  getFilteredList($event) {
+    let stockName: string = (<HTMLInputElement>document.getElementById('stockName')).value;
+    this.filteredList = [];
+
+    if (stockName.length > 2) {
+      if ($event.timeStamp - this.lastkeydown1 > 200) {
+        this.filteredList = this.searchFromArray(stockName);
+        this.lastkeydown1 = $event.timeStamp;
+      }
+    }
   }
 
-}
+  searchFromArray(regex: string): NasdaqStocksRowModel[] {
+    let matches: NasdaqStocksRowModel[] = [];
+    for (let i = 0; i < this.rows.length; i++) {
+      if (this.rows[i].name.toLowerCase().match(regex.toLowerCase())) {
+        matches.push(this.rows[i]);
+      }
+      if (matches.length > 99) {
+        this.overFlowSearch = true;
+        break;
+      } else {
+        this.overFlowSearch = false;
+      }
+    }
+    return matches;
+  };
 
-export class ResponseModel {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
 }

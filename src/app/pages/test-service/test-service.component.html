@@ -1,37 +1,52 @@
 <div class="container-fluid">
 
-	<ng-container>
-		<button (click)="tryService()">
-			recupera dati
-		</button>
-		<br><br>
-
-		<ng-container *ngIf="outPresent">
-			<strong>Conta: {{users.length}}</strong><br><br>
-			<ng-container *ngFor="let user of users">
-				userId: {{user.userId}}<br>
-				id: {{user.id}}<br>
-				title: {{user.title}}<br>
-				body: {{user.body}}<br><br>
-			</ng-container>
-		</ng-container>
-
-		<div class="row">
-			<p>
-				Course Name : </p><input type="text" [(ngModel)]=searchString>
-			<div class="col-4">
-				<button (click)="searchImages()">Search OK</button>
-			</div>
-			<div class="col-4">
-				<button (click)="fetchImages()">Search EXP</button>
-			</div>
+	<div class="row">
+		<div class="col-2 no-margin">
+			<p>Totale stock: <strong>{{totalrecords}}</strong></p>
 		</div>
+		<div class="col-4 no-margin">
+			<form>
+				<input class="form-control me-2" type="text" placeholder="Cerca" id="stockName"
+					(keyup)="getFilteredList($event)" aria-label="Search"
+					[attr.disabled]="(!totalrecords || totalrecords == 0) ? true : null">
+				<div class="dropdown-container">
+					<ul>
+						<li *ngFor="let item of filteredList" [value]="item.name" (click)="selectStock(item)">
+							{{item.name}}
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div class="col-2 no-margin" style="display: inline-flex;">
+			<p *ngIf="(filteredList || []).length > 0">Match:
+				<strong>
+					{{(filteredList || []).length}}
+					<ng-container *ngIf="overFlowSearch">+</ng-container>
+				</strong>
+			</p>
+		</div>
+	</div>
 
-		<ul>
-			<li *ngFor="let image1 of imageSearch">
-				<img src="{{image1.owner.avatar_url}}">
-			</li>
-		</ul>
-	</ng-container>
+	<div class="row">
+		<div *ngIf="show" class="col">
+			<line-chart [data]="graphSource" [legend]="graphLegend" [morezIndex]="true" [view]="[1200,900]"
+				[tooltipTemplate]="tooltipTemplate" [tooltipDisabled]="false" [xAxisTickFormatting]="xFormatFn"
+				[yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax">
+				<ng-template #tooltipTemplate let-model="model">
+					<p *ngIf="type=='trendRate'" style="font-size: 10px; text-align: center; margin-bottom: 0;">
+						TASSO
+					</p>
+					<p *ngIf="type=='trendRate'" style="font-size: 16px; text-align: center; margin-bottom: 0;">
+						{{model.value}}%
+					<p *ngIf="type!='trendRate'" style="font-size: 10px; text-align: center; margin-bottom: 0;">
+						Valore importi
+					</p>
+					<p *ngIf="type!='trendRate'" style="font-size: 16px; text-align: center; margin-bottom: 0;">
+						{{model.value|currency:'':'':'0.2-2'}}
+				</ng-template>
+			</line-chart>
+		</div>
+	</div>
 
 </div>

@@ -110,3 +110,13 @@
   }
 }
 
+.icon-container {
+  display: grid;
+  justify-content: center;
+  filter:invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%);
+  margin: 5px 0;
+}
+
+.margin-auto {
+  margin: auto;
+}

@@ -29,13 +29,20 @@
             "host": "/api/mock-server/"
         }
     ],
-    "yahoo-api": [
+    "stock-api": [
         {
             "name": "getChart",
-            "baseUrl": "/v8/finance/",
-            "endpoint": "chart/:id",
+            "baseUrl": "/v8/finance",
+            "endpoint": "/chart/:id",
             "method": "get",
             "host": "/api/yahoo-stock/"
+        },
+        {
+            "name": "getStocks",
+            "baseUrl": "/screener",
+            "endpoint": "/stocks",
+            "method": "get",
+            "host": "/api/nasdaq-stock/"
         }
     ]
 }

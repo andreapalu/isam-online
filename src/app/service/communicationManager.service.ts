@@ -15,9 +15,17 @@ export class CommunicationManagerService {
     constructor(
         private httpClient: HttpClient
     ) {
-        this.loadStaticFile<{ [apiGroup: string]: ApiCatalogModel[] }>("../../assets/env/apicatalog/api.json").subscribe(
-            file => this.apiCatalog = file
-        )
+    }
+
+    init(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.loadStaticFile<{ [apiGroup: string]: ApiCatalogModel[] }>("../../assets/env/apicatalog/api.json").subscribe(
+                file => {
+                    this.apiCatalog = file;
+                    resolve();
+                }
+            )
+        });
     }
 
     /**
@@ -79,7 +87,7 @@ export class CommunicationManagerService {
                 && api.method == request.apiMethod
             ));
         if (!apiDefinition) {
-            throw new Error("api definition not found in apicatalog!");
+            throw new Error("api definition not found in apicatalog!" + JSON.stringify(this.apiCatalog));
         }
         let finalUrl: string = applicationBaseurl + (apiDefinition.host || "") + apiDefinition.baseUrl + apiDefinition.endpoint;
         if (!request.httpOptions) {
