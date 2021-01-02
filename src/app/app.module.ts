@@ -55,6 +55,9 @@ export { AreaComponent } from "./component/line-chart/line-area";
 export { LineChartComponent } from "./component/line-chart/line-chart.component";
 export { LineSerieComponent } from "./component/line-chart/line-serie";
 
+import { SpinnerComponent } from "./component/spinner/spinner.component";
+export { SpinnerComponent } from "./component/spinner/spinner.component";
+
 // import { DatepickerDropdownComponent } from "./component/datepicker/datepicker.component";
 // export { DatepickerDropdownComponent } from "./component/datepicker/datepicker.component";
 
@@ -69,8 +72,17 @@ import { CommunicationManagerService } from "./service/communicationManager.serv
 export { CommunicationManagerService } from "./service/communicationManager.service";
 
 import { AuthorService } from "./service/author/author.service";
-import { StockService } from "./service/stock.service";
 export { AuthorService } from "./service/author/author.service";
+
+import { StockService } from "./service/stock.service";
+export { StockService } from "./service/stock.service";
+
+import { SpinnerService } from "./service/spinner.service";
+export { SpinnerService } from "./service/spinner.service";
+
+// ---------- INTERCEPTOR ---------- //
+import { httpInterceptorProviders } from "./interceptor/interceptors.list";
+export { httpInterceptorProviders } from "./interceptor/interceptors.list";
 
 export function initExtService(extractionService: ExtractionService): Function {
   return function () {
@@ -121,9 +133,11 @@ export const routerModuleForChild = RouterModule.forRoot([
     AreaComponent,
     CircleSeriesComponent,
     AuthorComponent,
-    RaiComponent
+    RaiComponent,
+    SpinnerComponent
   ],
   entryComponents: [
+    SpinnerComponent
   ],
   exports: [
 
@@ -149,7 +163,9 @@ export const routerModuleForChild = RouterModule.forRoot([
       'multi': true
     },
     AuthorService,
-    StockService
+    StockService,
+    SpinnerService,
+    httpInterceptorProviders
     // { provide: APPLICATION_BASE_URL, useValue: 'Hello world' }
   ]
 })

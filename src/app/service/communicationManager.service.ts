@@ -5,6 +5,7 @@ import { HttpOptions } from "../../assets/const/HttpOptions";
 import { BaseServerResource } from "../om/json-server.model/BaseServerResource";
 import { stringsNotNull } from "../util/stringsNotNull";
 import { ApiCatalogModel } from "../../assets/const/ApiCatalogModel";
+import { SpinnerService } from "./spinner.service";
 
 @Injectable()
 export class CommunicationManagerService {
@@ -13,7 +14,8 @@ export class CommunicationManagerService {
     apiCatalog: { [apiGroup: string]: ApiCatalogModel[] } = {};
 
     constructor(
-        private httpClient: HttpClient
+        private httpClient: HttpClient,
+        private spinnerService: SpinnerService
     ) {
     }
 
