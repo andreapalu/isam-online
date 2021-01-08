@@ -1,5 +1,7 @@
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
+import { LoaderInterceptor } from "./loader.interceptor";
+/*
 import { NotifyInterceptor } from "./notify.interptor";
 import { HttpsInterceptor } from "./https.interceptor";
 import { ProfilerInterceptor } from "./profiler.interceptor";
@@ -8,8 +10,8 @@ import { CacheInterceptor } from "./cache.interceptor";
 import { HeaderInterceptor } from "./header.interceptor";
 import { ErrorInterceptor } from "./error.interceptor";
 import { FakeInterceptor } from "./fake.interceptor";
-import { LoaderInterceptor } from "./loader.interceptor";
 import { ConvertInterceptor } from "./convert.interceptor";
+*/
 
 export const httpInterceptorProviders = [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
