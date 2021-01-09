@@ -19,7 +19,7 @@ export class HomeComponent extends BasePageComponent {
   }
 
   index: number = 0;
-  add() {
+  addTest() {
     this.index++;
     let a: string = (this.index % 2 == 0) ? "looooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooo ooooong" : "";
     this.notificationService.add(new NewNotificationModel(
@@ -27,6 +27,15 @@ export class HomeComponent extends BasePageComponent {
       `notifica num: ${this.index}` + a,
       () => { console.log("Ciao") },
       "../../../assets/image/favicon-16x16.png"
+    ));
+  }
+  add() {
+    this.index++;
+    this.notificationService.add(new NewNotificationModel(
+      `Titolo notifica num: ${this.index}`,
+      `Contenuto notifica num: ${this.index}`,
+      () => { console.log("Ciao") },
+      (this.index % 2 == 0) ? "../../../assets/image/favicon-16x16.png" :  "../../../assets/image/favicon-32x32.png"
     ));
   }
 }

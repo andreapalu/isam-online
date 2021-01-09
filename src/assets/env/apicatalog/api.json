@@ -2,28 +2,28 @@
     "author-api": [
         {
             "name": "getAuthors",
-            "baseUrl": "author",
+            "baseUrl": "/author",
             "endpoint": "",
             "method": "get",
             "host": "/api/mock-server"
         },
         {
             "name": "deleteAuthor",
-            "baseUrl": "author",
+            "baseUrl": "/author",
             "endpoint": "/:id",
             "method": "delete",
             "host": "/api/mock-server"
         },
         {
             "name": "postAuthor",
-            "baseUrl": "author",
+            "baseUrl": "/author",
             "endpoint": "",
             "method": "post",
             "host": "/api/mock-server"
         },
         {
             "name": "updateAuthor",
-            "baseUrl": "author",
+            "baseUrl": "/author",
             "endpoint": "/:id",
             "method": "put",
             "host": "/api/mock-server"
@@ -66,6 +66,29 @@
             "endpoint": "/archivio/puntate/:year/:pag",
             "method": "get",
             "host": "/api/rai"
+        }
+    ],
+    "notification-api": [
+        {
+            "name": "getNotifications",
+            "baseUrl": "/notification",
+            "endpoint": "",
+            "method": "get",
+            "host": "/api/mock-server"
+        },
+        {
+            "name": "deleteNotification",
+            "baseUrl": "/notification",
+            "endpoint": "/:id",
+            "method": "delete",
+            "host": "/api/mock-server"
+        },
+        {
+            "name": "postNotification",
+            "baseUrl": "/notification",
+            "endpoint": "",
+            "method": "post",
+            "host": "/api/mock-server"
         }
     ]
 }
