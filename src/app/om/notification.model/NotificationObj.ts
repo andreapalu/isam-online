@@ -48,27 +48,27 @@ export class NotificationObj {
   }
   
   function getElapsed(elapsedMS: number): string {
-    let elapsedS: number = parseInt((elapsedMS / 1000).toFixed(0));
+    let elapsedS: number = Math.floor(elapsedMS / 1000);
     if (elapsedS < 2) {
       return `Ora`;
     } else if (elapsedS < 60) {
-      return `${elapsedS} secondi`;
+      return `${elapsedS} secondi fa`;
     } else if (elapsedS < 60 * 2) {
-      return `${(elapsedS / 60).toFixed(0)} minuto`;
+      return `${Math.floor(elapsedS / 60)} minuto fa`;
     } else if (elapsedS < 60 * 60) {
-      return `${(elapsedS / 60).toFixed(0)} minuti`;
+      return `${Math.floor(elapsedS / 60)} minuti fa`;
     } else if (elapsedS < 60 * 60 * 2) {
-      return `${(elapsedS / (60 * 60)).toFixed(0)} ora`;
+      return `${Math.floor(elapsedS / (60 * 60))} ora fa`;
     } else if (elapsedS < 60 * 60 * 24) {
-      return `${(elapsedS / (60 * 60)).toFixed(0)} ore`;
+      return `${Math.floor(elapsedS / (60 * 60))} ore fa`;
     } else if (elapsedS < 60 * 60 * 24 * 2) {
-      return `${(elapsedS / (60 * 60 * 24)).toFixed(0)} giorno`;
+      return `${Math.floor(elapsedS / (60 * 60 * 24))} giorno fa`;
     } else if (elapsedS < 60 * 60 * 24 * 7) {
-      return `${(elapsedS / (60 * 60 * 24)).toFixed(0)} giorni`;
+      return `${Math.floor(elapsedS / (60 * 60 * 24))} giorni fa`;
     } else if (elapsedS < 60 * 60 * 24 * 7 * 2) {
-      return `${(elapsedS / (60 * 60 * 24 * 7)).toFixed(0)} settimana`;
+      return `${Math.floor(elapsedS / (60 * 60 * 24 * 7))} settimana fa`;
     } else if (elapsedS < 60 * 60 * 24 * 7 * 4) {
-      return `${(elapsedS / (60 * 60 * 24 * 7)).toFixed(0)} settimane`;
+      return `${Math.floor(elapsedS / (60 * 60 * 24 * 7))} settimane fa`;
     } else {
       return `Più di 4 settimane fa`;
     }
