@@ -10,8 +10,8 @@ import { CommunicationManagerService } from '../../service/communicationManager.
 import { NavigationManagerService } from '../../service/navigationManager.service';
 
 @Component({
-  templateUrl: './base-page.component.html',
-  styleUrls: ['./base-page.component.scss'],
+  template: '',
+  styles: [],
 })
 export abstract class BasePageComponent implements
   OnChanges, OnInit, DoCheck,

@@ -58,6 +58,9 @@ export { LineSerieComponent } from "./component/line-chart/line-serie";
 import { SpinnerComponent } from "./component/spinner/spinner.component";
 export { SpinnerComponent } from "./component/spinner/spinner.component";
 
+import { NotificationComponent } from "./component/notification/notification.component";
+export { NotificationComponent } from "./component/notification/notification.component";
+
 // import { DatepickerDropdownComponent } from "./component/datepicker/datepicker.component";
 // export { DatepickerDropdownComponent } from "./component/datepicker/datepicker.component";
 
@@ -79,6 +82,9 @@ export { StockService } from "./service/stock.service";
 
 import { SpinnerService } from "./service/spinner.service";
 export { SpinnerService } from "./service/spinner.service";
+
+import { NotificationService } from "./service/notification.service";
+export { NotificationService } from "./service/notification.service";
 
 // ---------- INTERCEPTOR ---------- //
 import { httpInterceptorProviders } from "./interceptor/interceptors.list";
@@ -134,10 +140,12 @@ export const routerModuleForChild = RouterModule.forRoot([
     CircleSeriesComponent,
     AuthorComponent,
     RaiComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    NotificationComponent
   ],
   entryComponents: [
-    SpinnerComponent
+    SpinnerComponent,
+    NotificationComponent
   ],
   exports: [
 
@@ -165,7 +173,8 @@ export const routerModuleForChild = RouterModule.forRoot([
     AuthorService,
     StockService,
     SpinnerService,
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    NotificationService
     // { provide: APPLICATION_BASE_URL, useValue: 'Hello world' }
   ]
 })
