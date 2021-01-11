@@ -44,6 +44,7 @@ export class NotificationService {
         componentRef.instance._notificationContent = new NotificationObj(
             newNotificationModel.title,
             newNotificationModel.content,
+            newNotificationModel.read,
             componentRef,
             top,
             this._notificationList.length,
@@ -83,6 +84,7 @@ export class NotificationService {
         componentRef.instance._notificationContent = new NotificationObj(
             newNotificationModel.title,
             newNotificationModel.content,
+            newNotificationModel.read,
             componentRef,
             top,
             this._notificationList.length,
@@ -118,6 +120,7 @@ export class NotificationService {
         this.reset(new NewNotificationModel(
             notif.instance._notificationContent.title,
             notif.instance._notificationContent.content,
+            notif.instance._notificationContent.read,
             notif.instance._notificationContent.action,
             notif.instance._notificationContent.icon,
             notif.instance._notificationContent.date,
@@ -176,6 +179,20 @@ export class NotificationService {
         this.communicationManagerService.callMockService<NotificationResource>({
             apiEndpoint: "notification-api/postNotification",
             apiMethod: HttpVerbs.post,
+            body: notification
+        }).subscribe(res => {
+            this.getNotifications();
+        });
+    }
+
+    markAsRead(notification: NotificationResource) {
+        notification.read = true;
+        this.communicationManagerService.callMockService<NotificationResource>({
+            apiEndpoint: "notification-api/putNotification",
+            apiMethod: HttpVerbs.put,
+            pathParams: {
+                id: notification.id.toString()
+            },
             body: notification
         }).subscribe(res => {
             this.getNotifications();

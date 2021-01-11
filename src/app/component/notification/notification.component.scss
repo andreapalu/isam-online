@@ -1,6 +1,7 @@
 .toast {
-    min-width: 250px;
-    max-width: 350px;
+    // min-width: 250px;
+    // max-width: 350px;
+    width: 350px;
     overflow: hidden; // cheap rounded corners on nested items
     font-size: .875rem;; // knock it down to 14px
     background-color: rgba(255,255,255,.85);
@@ -34,9 +35,16 @@
     align-items: center;
     padding: .25rem .75rem;
     color: #6c757d;
-    background-color:  rgba(255,255,255,.85);
+    // background-color:  rgba(255,255,255,.85);
     background-clip: padding-box;
     border-bottom: 1px solid rgba(0,0,0,.05);
+
+    &.read {
+        background-color: #ffffffd9;
+    }
+    &.unread {
+        background-color: #7ebcff;
+    }
 }
 
 .toast-body {

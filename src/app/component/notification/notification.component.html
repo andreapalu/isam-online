@@ -1,6 +1,6 @@
 <div #notificationRef class="toast fade show" style="position: absolute; right: 4px;"
     [ngStyle]="{'top.px': _notificationContent.top }" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
+    <div class="toast-header" [ngClass]="_notificationContent.read ? 'read' : 'unread'">
         <img *ngIf="!!_notificationContent.icon" [src]="_notificationContent.icon" class="rounded mr-2">
         <strong class="mr-auto">{{_notificationContent.title}}</strong>
         <small class="text-muted">{{_notificationContent.elapsed}}</small>
@@ -12,6 +12,6 @@
     <div class="toast-body" [style.cursor]="_notificationContent.action ? 'pointer' : 'unset'"
         (click)="_notificationContent.action()">
         {{_notificationContent.content}} <br>
-        altezza: {{_notificationContent.height}}
+        altezza: {{height}}<br>
     </div>
 </div>

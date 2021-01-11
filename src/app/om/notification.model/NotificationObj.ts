@@ -6,6 +6,7 @@ export class NotificationObj {
     content: string;
     action: Function;
     close: Function;
+    read: boolean;
     componentRef: ComponentRef<NotificationComponent>;
     index: number;
     top: number;
@@ -17,6 +18,7 @@ export class NotificationObj {
     constructor(
       title: string,
       content: string,
+      read: boolean,
       componentRef: ComponentRef<NotificationComponent>,
       top: number,
       index?: number,
@@ -26,6 +28,7 @@ export class NotificationObj {
     ) {
       this.title = title;
       this.content = content;
+      this.read = read;
       this.componentRef = componentRef;
       this.top = top;
       this.index = index || 0;

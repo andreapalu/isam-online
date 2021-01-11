@@ -89,6 +89,13 @@
             "endpoint": "",
             "method": "post",
             "host": "/api/mock-server"
+        },
+        {
+            "name": "putNotification",
+            "baseUrl": "/notification",
+            "endpoint": "/:id",
+            "method": "put",
+            "host": "/api/mock-server"
         }
     ]
 }

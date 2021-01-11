@@ -1,6 +1,7 @@
 export class NewNotificationModel {
     title: string;
     content: string;
+    read: boolean;
     action?: Function;
     icon?: string;
     date?: Date;
@@ -8,13 +9,15 @@ export class NewNotificationModel {
     constructor(
         title: string,
         content: string,
+        read: boolean,
         action?: Function,
         icon?: string,
-        date?: Date, 
+        date?: Date,
         topOffset?: number
-    ){
+    ) {
         this.title = title;
         this.content = content;
+        this.read = read;
         this.action = action;
         this.icon = icon;
         this.date = date;

@@ -3,14 +3,14 @@ import {
 } from '@angular/core';
 
 @Component({
-  template: `<div class="spinner"></div>`,
+  template: `<div class="spinner-container"><div class="spinner"></div></div>`,
   styles: [
     `.spinner {
-      border: 16px solid #f3f3f3; /* Light grey */
-      border-top: 16px solid #3498db; /* Blue */
+      border: 25px solid #f3f3f3; /* Light grey */
+      border-top: 25px solid #3498db; /* Blue */
       border-radius: 50%;
-      width: 100px;
-      height: 100px;
+      width: 200px;
+      height: 200px;
       margin: 100px auto;
       animation: spin 2s linear infinite;
     }`,
@@ -21,6 +21,11 @@ import {
     100% {
         transform: rotate(360deg);
       }
+    }
+    .spinner-container {
+      top: 25%;
+      position: fixed;
+      width: 100%;
     }`
   ],
 })

@@ -25,7 +25,7 @@ export class NotificationComponent implements OnChanges, AfterContentChecked {
       this.height = this.notificationRef.nativeElement.offsetHeight;
       if (this.height != 0) {
         return new Observable((observer) => {
-          observer.next({index: this._notificationContent.index, height: this.height});
+          observer.next({ index: this._notificationContent.index, height: this.height });
           observer.complete();
         })
       };
