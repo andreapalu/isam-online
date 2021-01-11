@@ -1,17 +1,39 @@
 <div #notificationRef class="toast fade show" style="position: absolute; right: 4px;"
     [ngStyle]="{'top.px': _notificationContent.top }" role="alert" aria-live="assertive" aria-atomic="true">
+
     <div class="toast-header" [ngClass]="_notificationContent.read ? 'read' : 'unread'">
         <img *ngIf="!!_notificationContent.icon" [src]="_notificationContent.icon" class="rounded mr-2">
         <strong class="mr-auto">{{_notificationContent.title}}</strong>
+
+        <p class="ml-2 mb-1 read-status-change bi-trash-fill" container="body"
+            [ngbTooltip]="deleteTemplate" (click)="updateNotification(true);">
+        </p>
+        <ng-template #deleteTemplate>
+            Elimina
+        </ng-template>
+
+        <p class="ml-2 mb-1 read-status-change" container="body"
+            [ngClass]="_notificationContent.read ? 'bi-envelope-fill' : 'bi-envelope-open-fill'"
+            [ngbTooltip]="!!_notificationContent.read ? readTemplate : unreadTemplate" (click)="updateNotification();">
+        </p>
+        <ng-template #readTemplate>
+            Segna come non letta
+        </ng-template>
+        <ng-template #unreadTemplate>
+            Segna come letta
+        </ng-template>
+
         <small class="text-muted">{{_notificationContent.elapsed}}</small>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"
             (click)="_notificationContent.close(); removeNotification();">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+
     <div class="toast-body" [style.cursor]="_notificationContent.action ? 'pointer' : 'unset'"
         (click)="_notificationContent.action()">
         {{_notificationContent.content}} <br>
         altezza: {{height}}<br>
     </div>
+
 </div>

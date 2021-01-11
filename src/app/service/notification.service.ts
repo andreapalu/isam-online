@@ -70,33 +70,36 @@ export class NotificationService {
      * Restore notification w/o adding to the DB
      * @param newNotificationModel 
      */
-    private reset(newNotificationModel: NewNotificationModel): NotificationComponent {
-        let componentRef = this.notificationFactory.create(this.injector);
-        let top: number;
-        if (!!newNotificationModel.topOffset) {
-            top = newNotificationModel.topOffset + 3;
-        } else if (this._notificationList.length > 0) {
-            let instance = this._notificationList[this._notificationList.length - 1].instance;
-            top = instance._notificationContent.top + instance.height + 3;
-        } else {
-            top = headerHeight;
+    private reset(newNotificationModel: NewNotificationModel | NotificationResource): NotificationComponent {
+        if (!!newNotificationModel) {
+            let componentRef = this.notificationFactory.create(this.injector);
+            let top: number;
+            if (!!newNotificationModel.topOffset) {
+                top = newNotificationModel.topOffset + 3;
+            } else if (this._notificationList.length > 0) {
+                let instance = this._notificationList[this._notificationList.length - 1].instance;
+                top = instance._notificationContent.top + instance.height + 3;
+            } else {
+                top = headerHeight;
+            }
+            let funct: Function = typeof newNotificationModel.action == 'string' && eval('(' + newNotificationModel.action.substring(1, newNotificationModel.action.length - 1) + ')');
+            componentRef.instance._notificationContent = new NotificationObj(
+                newNotificationModel.title,
+                newNotificationModel.content,
+                newNotificationModel.read,
+                componentRef,
+                top,
+                this._notificationList.length,
+                funct,
+                newNotificationModel.icon,
+                !!newNotificationModel['lastUpdate'] ? new Date(newNotificationModel['lastUpdate']) : newNotificationModel.date
+            );
+            componentRef.changeDetectorRef.detectChanges();
+            let domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+            document.body.appendChild(domElem);
+            this._notificationList.push(componentRef);
+            return componentRef.instance;
         }
-        componentRef.instance._notificationContent = new NotificationObj(
-            newNotificationModel.title,
-            newNotificationModel.content,
-            newNotificationModel.read,
-            componentRef,
-            top,
-            this._notificationList.length,
-            newNotificationModel.action,
-            newNotificationModel.icon,
-            newNotificationModel.date
-        );
-        componentRef.changeDetectorRef.detectChanges();
-        let domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-        document.body.appendChild(domElem);
-        this._notificationList.push(componentRef);
-        return componentRef.instance;
     }
 
     remove(notifIndex: number) {
@@ -117,7 +120,7 @@ export class NotificationService {
 
     addInOrder(i: number, oldList: ComponentRef<NotificationComponent>[], height?: number) {
         let notif: ComponentRef<NotificationComponent> = oldList[i];
-        this.reset(new NewNotificationModel(
+        let newNot = this.reset(new NewNotificationModel(
             notif.instance._notificationContent.title,
             notif.instance._notificationContent.content,
             notif.instance._notificationContent.read,
@@ -125,7 +128,8 @@ export class NotificationService {
             notif.instance._notificationContent.icon,
             notif.instance._notificationContent.date,
             height
-        )).ngAfterContentChecked().subscribe(value => {
+        ));
+        !!newNot && newNot.ngAfterContentChecked().subscribe(value => {
             if (!!value && value.index != null && value.height != 0 && oldList.length > (value.index + 1)) {
                 this.addInOrder(value.index + 1, oldList);
             }
@@ -136,7 +140,8 @@ export class NotificationService {
         if (!!height) {
             // oldList[i].topOffset = height;
         }
-        this.reset(oldList[i]).ngAfterContentChecked().subscribe(value => {
+        let newNot = this.reset(oldList[i]);
+        !!newNot && newNot.ngAfterContentChecked().subscribe(value => {
             if (!!value && value.index != null && value.height != 0 && oldList.length > (value.index + 1)) {
                 this.addInOrderByService(value.index + 1, oldList, value.height);
             }
@@ -163,7 +168,12 @@ export class NotificationService {
         });
     }
 
-    deleteNotification(notification: NotificationResource) {
+    deleteNotification(notificationObj: NotificationObj) {
+        let notification: NotificationResource = this._serviceNotification.find(notif => (
+            notif.content == notificationObj.content
+            && notif.title == notificationObj.title
+            && notif.read == notificationObj.read
+        ));
         this.communicationManagerService.callMockService<NotificationResource[]>({
             apiEndpoint: "notification-api/deleteNotification",
             apiMethod: HttpVerbs.delete,
@@ -185,8 +195,38 @@ export class NotificationService {
         });
     }
 
-    markAsRead(notification: NotificationResource) {
+    markAsRead(notificationObj: NotificationObj) {
+        let notification: NotificationResource = this._serviceNotification.find(notif => (
+            notif.content == notificationObj.content
+            && notif.title == notificationObj.title
+            && notif.read == notificationObj.read
+        ));
+        notification.insertDate = new Date(notification.insertDate);
+        notification.lastUpdate = new Date();
+        notification.lastUpdateUser = "FE_CLIENT";
         notification.read = true;
+        this.communicationManagerService.callMockService<NotificationResource>({
+            apiEndpoint: "notification-api/putNotification",
+            apiMethod: HttpVerbs.put,
+            pathParams: {
+                id: notification.id.toString()
+            },
+            body: notification
+        }).subscribe(res => {
+            this.getNotifications();
+        });
+    }
+
+    markAsUnRead(notificationObj: NotificationObj) {
+        let notification: NotificationResource = this._serviceNotification.find(notif => (
+            notif.content == notificationObj.content
+            && notif.title == notificationObj.title
+            && notif.read == notificationObj.read
+        ));
+        notification.insertDate = new Date(notification.insertDate);
+        notification.lastUpdate = new Date();
+        notification.lastUpdateUser = "FE_CLIENT";
+        notification.read = false;
         this.communicationManagerService.callMockService<NotificationResource>({
             apiEndpoint: "notification-api/putNotification",
             apiMethod: HttpVerbs.put,

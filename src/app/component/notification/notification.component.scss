@@ -45,6 +45,13 @@
     &.unread {
         background-color: #7ebcff;
     }
+
+    .read-status-change {
+        cursor: pointer;
+        color: #005cbf;
+        font-size: 16px;
+        margin-right: 10px;
+    }
 }
 
 .toast-body {

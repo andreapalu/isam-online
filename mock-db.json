@@ -80,30 +80,14 @@
   "notification": [
     {
       "id": 1,
-      "insertDate": "2021-01-09T20:19:25.356Z",
-      "lastUpdate": "2021-01-09T20:19:25.356Z",
+      "insertDate": "2021-01-11T21:38:23.136Z",
+      "lastUpdate": "2021-01-11T21:38:23.136Z",
       "lastUpdateUser": "FE_CLIENT",
       "title": "Titolo notifica num: 1",
       "content": "Contenuto notifica num: 1",
+      "read": false,
+      "action": "\"() => { console.log('Ciao'); }\"",
       "icon": "../../../assets/image/favicon-32x32.png"
-    },
-    {
-      "id": 2,
-      "insertDate": "2021-01-09T20:22:58.063Z",
-      "lastUpdate": "2021-01-09T20:22:58.063Z",
-      "lastUpdateUser": "FE_CLIENT",
-      "title": "Titolo notifica num: 1",
-      "content": "Contenuto notifica num: 1",
-      "icon": "../../../assets/image/favicon-32x32.png"
-    },
-    {
-      "id": 3,
-      "insertDate": "2021-01-09T20:23:13.847Z",
-      "lastUpdate": "2021-01-09T20:23:13.847Z",
-      "lastUpdateUser": "FE_CLIENT",
-      "title": "Titolo notifica num: 2",
-      "content": "Contenuto notifica num: 2",
-      "icon": "../../../assets/image/favicon-16x16.png"
     }
   ]
 }

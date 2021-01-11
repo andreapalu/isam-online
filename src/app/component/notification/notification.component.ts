@@ -50,4 +50,17 @@ export class NotificationComponent implements OnChanges, AfterContentChecked {
     notificationService.remove(this._notificationContent.index);
   }
 
+  updateNotification(_delete?: boolean) {
+    let notificationService: NotificationService = this.injector.get(NotificationService);
+    if (_delete) {
+      notificationService.deleteNotification(this._notificationContent);
+    } else {
+      if (this._notificationContent.read) {
+        notificationService.markAsUnRead(this._notificationContent);
+      } else {
+        notificationService.markAsRead(this._notificationContent);
+      }
+    }
+  }
+
 }

@@ -3,6 +3,17 @@
         <h3>HOMEPAGE</h3>
     </div>
     <div class="row">
-        <button (click)="add()">Aggiungi notifica</button><br>
+        <div class="col-2">
+            <button type="button" class="btn btn-outline-primary mr-2" (click)="add()">Aggiungi notifica</button>
+        </div>
+        <div class="col-4">
+            <button type="button" class="btn btn-outline-secondary mr-2" [ngbTooltip]="tipContent" triggers="manual"
+                #t="ngbTooltip" container="body" (click)="tooltip(t)">
+                Apri tooltip
+            </button>
+            <ng-template #tipContent>
+                Ciao, <b>{{name}}</b>!
+            </ng-template>
+        </div>
     </div>
 </div>
