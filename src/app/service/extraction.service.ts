@@ -3,7 +3,6 @@ import { Exctraction } from "../om/extraction.model/Extraction";
 import * as XLSX from "xlsx";
 import { stringsNotNull } from "../util/stringsNotNull";
 import { CommunicationManagerService, HttpVerbs } from "./communicationManager.service";
-import { AuthorResource } from "../om/json-server.model/Author";
 
 @Injectable({
     providedIn: "root"

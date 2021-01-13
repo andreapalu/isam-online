@@ -42,6 +42,9 @@ export { AuthorComponent } from "./pages/author/author.component";
 import { RaiComponent } from "./pages/rai/rai.component";
 export { RaiComponent } from "./pages/rai/rai.component";
 
+import { CryptoComponent } from "./pages/crypto/crypto.component";
+export { CryptoComponent } from "./pages/crypto/crypto.component";
+
 // ---------- COMPONENTS ---------- //
 import { HeaderComponent } from "./component/header/header.component";
 export { HeaderComponent } from "./component/header/header.component";
@@ -113,6 +116,7 @@ export const routerModuleForChild = RouterModule.forRoot([
   { path: 'infografica', component: InfograficaComponent },
   { path: 'author', component: AuthorComponent },
   { path: 'rai', component: RaiComponent },
+  { path: 'crypto', component: CryptoComponent },
   { path: '**', component: HomeComponent }
 ]);
 
@@ -141,7 +145,8 @@ export const routerModuleForChild = RouterModule.forRoot([
     AuthorComponent,
     RaiComponent,
     SpinnerComponent,
-    NotificationComponent
+    NotificationComponent,
+    CryptoComponent
   ],
   entryComponents: [
     SpinnerComponent,

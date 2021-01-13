@@ -81,11 +81,11 @@
     {
       "id": 1,
       "insertDate": "2021-01-11T21:38:23.136Z",
-      "lastUpdate": "2021-01-11T21:38:23.136Z",
+      "lastUpdate": "2021-01-11T21:43:25.811Z",
       "lastUpdateUser": "FE_CLIENT",
       "title": "Titolo notifica num: 1",
       "content": "Contenuto notifica num: 1",
-      "read": false,
+      "read": true,
       "action": "\"() => { console.log('Ciao'); }\"",
       "icon": "../../../assets/image/favicon-32x32.png"
     }

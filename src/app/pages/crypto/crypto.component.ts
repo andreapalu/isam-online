@@ -6,11 +6,11 @@ import { GraphData } from "../../component/line-chart/line-chart-model";
 import { LineChartSeriesKey } from "../../../assets/const/LineCharSeries";
 
 @Component({
-  selector: "test-service",
-  templateUrl: "./test-service.component.html",
-  styleUrls: ["./test-service.component.scss"]
+  selector: "crypto",
+  templateUrl: "./crypto.component.html",
+  styleUrls: ["./crypto.component.scss"]
 })
-export class TestServiceComponent extends BasePageComponent {
+export class CryptoComponent extends BasePageComponent {
 
   rows: NasdaqStocksRowModel[] = [];
   totalrecords: number = 0;
@@ -31,7 +31,8 @@ export class TestServiceComponent extends BasePageComponent {
   }
 
   onInit() {
-    this.getNasdaqStocks();
+    // this.getNasdaqStocks();
+    this.getChart("BTC-USD");
   }
 
   getNasdaqStocks() {
@@ -44,6 +45,23 @@ export class TestServiceComponent extends BasePageComponent {
   }
 
   getChart(id: string) {
+    this.stockService.getChart(id).subscribe(response => {
+      this.show = false;
+      let grapObj = this.stockService.generateGraph(
+        response,
+        [LineChartSeriesKey._value] // le serie tornano tutte hanno tutte lo stesso valore
+      );
+      this.graphSource = grapObj.graphSource;
+      this.graphLegend = grapObj.graphLegend;
+      this.yScaleMax = grapObj.yScaleMax;
+      this.yScaleMin = grapObj.yScaleMin;
+      setTimeout(() => {
+        this.show = true;
+      }, 75);
+    })
+  }
+
+  getHistoryChart(id: string) {
     this.stockService.getHistoryChart(id).subscribe(response => {
       this.show = false;
       let grapObj = this.stockService.generateGraph(
@@ -65,7 +83,7 @@ export class TestServiceComponent extends BasePageComponent {
     this.selectedStock = item;
     (<HTMLInputElement>document.getElementById('stockName')).value = item.name;
     this.filteredList = [];
-    this.getChart(item.symbol)
+    this.getHistoryChart(item.symbol)
   }
 
   filteredList: NasdaqStocksRowModel[];
