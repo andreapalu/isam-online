@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -22,7 +23,7 @@ import { GraphData } from './line-chart-model';
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.scss']
 })
-export class LineChartComponent implements OnChanges, OnInit {
+export class LineChartComponent implements OnChanges, OnInit, AfterViewInit {
 
   @Input() legend: string[] = [];
   @Input() xAxis = true;
@@ -105,17 +106,55 @@ export class LineChartComponent implements OnChanges, OnInit {
 
   totElements: number = 0;
 
+  show: boolean = true;
+
   constructor(
     private _sanitizer: DomSanitizer
   ) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!!changes && !!changes.data && !!changes.data.currentValue) {
-      this.update();
-      this.totElements = 0;
-      this.data.forEach(x => this.totElements += x.series.length);
-      this.data[0].series.length
+  ngOnInit() {
+    this.data.forEach(el => {
+      this.scheme.domain.push(el.color)
+    });
+    if (this.curve != undefined && this.curveTypes.find(x => x.name == this.curve)) {
+      this.curve = this.curveTypes.find(x => x.name == this.curve).value;
+    } else {
+      this.curve = curveCatmullRom.alpha(0.5)
     }
+    // window.addEventListener("resize", (ev) => this.getWindowSize(ev));
+  }
+
+  ngAfterViewInit() {
+    // this.getWindowSize();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!!changes) {
+      if (!!changes.data && !!changes.data.currentValue) {
+        this.update();
+        this.totElements = 0;
+        this.data.forEach(x => this.totElements += x.series.length);
+        this.data[0].series.length
+      }
+      if (!!changes.view && !!changes.view.currentValue) {
+        // this.getWindowSize();
+      }
+    }
+  }
+
+  getWindowSize(ev?) {
+    if (this.show) {
+      this.show = false;
+      setTimeout(() => {
+        this.show = true;
+      }, 75);
+    }
+    let screenWidth: number = (window.innerWidth
+      || document.documentElement.clientWidth
+      || document.body.clientWidth) - 50;
+    let x = (100 / this.width) * screenWidth;
+    this.width = x * this.width;
+    this.height = (this.width / 4 * 3);
   }
 
   hexToFilter(hex) {
@@ -127,17 +166,6 @@ export class LineChartComponent implements OnChanges, OnInit {
       return '';
     }
   };
-
-  ngOnInit() {
-    this.data.forEach(el => {
-      this.scheme.domain.push(el.color)
-    });
-    if (this.curve != undefined && this.curveTypes.find(x => x.name == this.curve)) {
-      this.curve = this.curveTypes.find(x => x.name == this.curve).value;
-    } else {
-      this.curve = curveCatmullRom.alpha(0.5)
-    }
-  }
 
   getXDomain(): any[] {
     let values = this.getUniqueXDomainValues(this.data);

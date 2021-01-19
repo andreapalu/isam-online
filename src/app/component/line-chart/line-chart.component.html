@@ -16,9 +16,11 @@
             <div class="col" *ngFor="let series of legend; index as i" style="min-width: 250px;">
                 <p style="font-size: 14px;">
                     <span>
-                        <img [style.filter]="hexToFilter(scheme.domain[i])" src="../../../assets/icon/circle-fill.svg"
-                            class="margin-auto">
-                        {{series}}
+                        <!-- <img [style.filter]="hexToFilter(scheme.domain[i])" src="../../../assets/icon/circle-fill.svg"
+                            class="margin-auto"> -->
+                        <p class="ml-2 mb-1 bi-circle-fill margin-auto" [style.color]="scheme.domain[i]">
+                            {{series}}
+                        </p>
                     </span>
                 </p>
             </div>
@@ -27,7 +29,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <ngx-charts-chart [view]="view" [activeEntries]="activeEntries">
+        <ngx-charts-chart *ngIf="show" [view]="view" [activeEntries]="activeEntries">
             <svg:g [attr.transform]="transform" class="line-chart chart">
                 <svg:g ngx-charts-x-axis *ngIf="xAxis" [xScale]="xScale" [dims]="dims" [showGridLines]="false"
                     [showLabel]="showXAxisLabel" [labelText]="xAxisLabel" [tickFormatting]="xAxisTickFormatting"
@@ -63,7 +65,7 @@
 </div>
 
 <ng-template #defaultTooltipTemplate>
-    <p style="font-size: 14px; text-align: center; margin-bottom: 0;">{{actualSeries}} | <span
+    <p style="font-size: 14px; text-align: center; margin-bottom: 0;">{{actualSeries}}: <span
             *ngIf="scaleType=='time'">{{actualDate| date:'dd.MM.yyyy'}}</span> <span
             *ngIf="scaleType!='time'">{{actualDate}}</span></p>
     <p style="font-size: 14px; text-align: center; margin-bottom: 0;">{{actualValue | currency:'':''}}</p>

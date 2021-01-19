@@ -240,7 +240,7 @@ export function getExtractionType(key: string): string {
 }
 
 export const ActionIcon = {
-  _play: "play-circle.svg"
+  _play: "bi-play-circle"
 }
 
 export const ExtractionTypes = {

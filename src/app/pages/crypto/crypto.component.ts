@@ -23,6 +23,9 @@ export class CryptoComponent extends BasePageComponent {
   yScaleMin: number;
   yScaleMax: number;
 
+  width: number;
+  height: number;
+
   constructor(
     injector: Injector,
     private stockService: StockService
@@ -31,8 +34,26 @@ export class CryptoComponent extends BasePageComponent {
   }
 
   onInit() {
-    // this.getNasdaqStocks();
-    this.getChart("BTC-USD");
+    // this.getChart("BTC-USD");
+    this.getChart("AAPL");
+    window.addEventListener("resize", () => this.getWindowSize());
+  }
+
+  getWindowSize() {
+    if (this.show) {
+      this.show = false;
+      setTimeout(() => {
+        this.show = true;
+      }, 75);
+    }
+    this.width = (window.innerWidth
+      || document.documentElement.clientWidth
+      || document.body.clientWidth) - 50;
+    this.height = (this.width / 4 * 3);
+  }
+
+  afterViewInit() {
+    this.getWindowSize();
   }
 
   getNasdaqStocks() {

@@ -114,17 +114,16 @@ export class ExtractionComponent extends BasePageComponent {
               let td = document.createElement("td");
               td.style.border = "1px solid black";
               if (stringsNotNull(col.action)) {
-                let img = document.createElement("img");
+                let span = document.createElement("span");
                 let nav = document.createElement("nav");
-                img.src = "../../../assets/icon/" + col.action;
-                img.title = col.action;
-                img.style.cursor = "pointer";
-                img.style.filter = "invert(36%) sepia(100%) saturate(1050%) hue-rotate(210deg) brightness(84%) contrast(195%)";
+                span.className = "text-primary " + col.action;
+                span.title = col.action;
+                span.style.cursor = "pointer";
                 let a = document.createElement("a");
                 a.setAttribute("href", "/infografica");
                 a.setAttribute("routerLink", "/infografica");
                 a.setAttribute("routerLinkActive", "active");
-                img.onclick = function () {
+                span.onclick = function () {
                   sessionStorage.setItem("infograficaPayload", JSON.stringify({ 
                     table: selectedExtraction,
                     row: row
@@ -133,8 +132,8 @@ export class ExtractionComponent extends BasePageComponent {
                 };
                 td.style.textAlign = "center";
                 td.style.verticalAlign = "middle";
-                img.appendChild(a);
-                nav.appendChild(img);
+                span.appendChild(a);
+                nav.appendChild(span);
                 td.appendChild(nav);
               } else {
                 td.innerHTML = !!col.colField ? col.isCurrency ? this.formatMoney(col.colField) : col.colField : "-";

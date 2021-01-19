@@ -7,7 +7,8 @@
 		<div class="row mb-3">
 			<div class="col-2">
 				<label for="idInput" class="form-label">ID</label>
-				<input type="number" class="form-control" id="idInput" min="1" formControlName="id" [attr.disabled]="isAuthorUpdate ? true : null">
+				<input type="number" class="form-control" id="idInput" min="1" formControlName="id"
+					[attr.disabled]="isAuthorUpdate ? true : null">
 				<ng-container *ngTemplateOutlet="inputError; context: { name: 'id', label: 'ID' }">
 				</ng-container>
 			</div>
@@ -87,12 +88,14 @@
 			<td>{{author.id}}</td>
 			<td>
 				<div class="row">
-					<span class="col icon-container" (click)="deleteAuthor(author)">
-						<img src="../../../assets/icon/trash.svg" class="margin-auto">
+					<span class="col text-primary text-center" (click)="deleteAuthor(author)">
+						<p class="bi-trash margin-auto">
+						</p>
 						Elimina
 					</span>
-					<span class="col icon-container" (click)="showForm(null, author)">
-						<img src="../../../assets/icon/pencil.svg" class="margin-auto">
+					<span class="col text-primary text-center" (click)="showForm(null, author)">
+						<p class="bi-pencil margin-auto">
+						</p>
 						Modifica
 					</span>
 				</div>

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container">
 
 	<div class="row">
 		<div class="col-2 no-margin">
@@ -28,10 +28,14 @@
 		</div>
 	</div>
 
+</div>
+
+<div class="container-fluid" id="graphContainer">
+
 	<div class="row">
 		<div *ngIf="show" class="col">
-			<line-chart [data]="graphSource" [legend]="graphLegend" [morezIndex]="true" [view]="[1600,1200]"
-				[tooltipDisabled]="false" [xAxisTickFormatting]="xFormatFn"
+			<line-chart [data]="graphSource" [legend]="graphLegend" [morezIndex]="true"
+				[view]="[width,height]" [tooltipDisabled]="false" [xAxisTickFormatting]="xFormatFn"
 				[yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax" xAxisLabel="Data" yAxisLabel="Valore"
 				[showXAxisLabel]="true" [showYAxisLabel]="true">
 				<ng-template #tooltipTemplate let-model="model">

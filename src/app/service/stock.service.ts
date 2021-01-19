@@ -9,24 +9,49 @@ import { GraphData } from "../component/line-chart/line-chart-model";
 import { LineCharSeriesMap, yahooDateMultiplier } from "../../assets/const/LineCharSeries";
 import { parseDateNotNull, parseFloatNotNull } from "../util/parseFunction";
 
+const _startDate: Date = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 0));
+const _today: Date = new Date();
+
+/**
+ * regularMarketTime: 1610704142 --> * 1000 = data attuale
+ * firstTradeDateMilliseconds: 1410908400000
+ */
+
 @Injectable()
 export class StockService {
+  diff: number;
 
   constructor(
     private communicationManagerService: CommunicationManagerService
   ) {
+    let a = _startDate;
+    a.setFullYear(2021)
+    this.diff = a.getTime() - _startDate.getTime();
   }
 
   getChart(id: string): Observable<YahooChartModel> {
+    let endDate: Date = new Date(Date.UTC(1970, 0, _startDate.getDay() + 2, 0, 0, 0, 0));
+    let startDate: Date = new Date(Date.UTC(_today.getFullYear(), _today.getMonth(), _today.getDay() - 2, 0, 0, 0, 0));
     return this.communicationManagerService.callMockService<YahooChartModel>({
       apiEndpoint: "stock-api/getChart",
       apiMethod: HttpVerbs.get,
       pathParams: { id },
       queryStringParams: {
-        region: "US&lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=1d&corsDomain=finance.yahoo.com&.tsrc=finance"
+        region: "US",
+        lang: "en-US",
+        // includePrePost: "false",
+        interval: "1d", // un punto ogni
+        period1: ((startDate.getTime() - this.diff) / 1000).toString(),
+        period2: ((_today.getTime() - this.diff) / 1000).toFixed(0).toString(),
+        // period2: "1000999999",
+        // useYfid: "true",
+        // range: "1wk",
+        // corsDomain: "finance.yahoo.com",
+        // ".tsrc": "finance"
       }
     })
   }
+  // interval/range one of [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
 
   getHistoryChart(id: string): Observable<YahooChartModel> {
     return this.communicationManagerService.callMockService<YahooChartModel>({
